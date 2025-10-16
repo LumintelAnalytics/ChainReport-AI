@@ -1,0 +1,13 @@
+.main-content {
+  padding: 20px;
+  display: grid;
+  grid-template-rows: 1fr; /* Takes up remaining space */
+  min-height: calc(100vh - 64px - 64px); /* Adjust 64px for header/footer height */
+}
+
+/* Basic responsive adjustments */
+@media (max-width: 768px) {
+  .main-content {
+    padding: 10px;
+  }
+}
