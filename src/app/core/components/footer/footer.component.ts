@@ -1,8 +1,12 @@
 import { Component } from '@angular/core';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-footer',
   templateUrl: './footer.component.html',
-  styleUrls: ['./footer.component.css']
+  styleUrls: ['./footer.component.scss']
 })
-export class FooterComponent { }
+export class FooterComponent {
+  version = environment.version;
+  currentYear = new Date().getFullYear();
+}
