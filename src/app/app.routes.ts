@@ -6,9 +6,10 @@ export const routes: Routes = [
     path: '',
     component: MainLayoutComponent,
     children: [
-      // Your application's routes will go here
-      // Example: { path: 'home', component: HomeComponent },
-      // { path: '', redirectTo: 'home', pathMatch: 'full' }
+      { path: 'home', component: MainLayoutComponent },
+      { path: 'generate-report', component: MainLayoutComponent },
+      { path: 'settings', component: MainLayoutComponent },
+      { path: '', redirectTo: 'home', pathMatch: 'full' }
     ]
   }
 ];
