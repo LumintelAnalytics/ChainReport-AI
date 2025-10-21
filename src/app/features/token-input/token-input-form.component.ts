@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 
@@ -12,5 +12,15 @@ import { MatInputModule } from '@angular/material/input';
   styleUrl: './token-input-form.component.scss',
 })
 export class TokenInputFormComponent {
-  tokenInput = new FormControl('', Validators.required);
+  tokenForm: FormGroup;
+
+  constructor(private fb: FormBuilder) {
+    this.tokenForm = this.fb.group({
+      token: ['', Validators.required],
+    });
+  }
+
+  get tokenInput() {
+    return this.tokenForm.get('token');
+  }
 }
