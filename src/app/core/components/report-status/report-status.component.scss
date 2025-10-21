@@ -1,0 +1,29 @@
+.report-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-weight: bold;
+  color: #fff;
+
+  mat-icon {
+    margin-right: 8px;
+  }
+
+  &.progress {
+    background-color: #2196f3; /* Blue */
+  }
+
+  &.success {
+    background-color: #4caf50; /* Green */
+  }
+
+  &.error {
+    background-color: #f44336; /* Red */
+  }
+
+  &.pending {
+    background-color: #ffc107; /* Amber */
+    color: #333;
+  }
+}
