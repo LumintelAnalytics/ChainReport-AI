@@ -1,6 +1,9 @@
-<mat-form-field appearance="fill">
-  <mat-label>Token Name, Symbol, or Address</mat-label>
-  <input matInput [formControl]="tokenInput" placeholder="e.g., Ethereum, ETH, 0x...">
-      <mat-error *ngIf="tokenInput.hasError('required') && (tokenInput.touched || tokenInput.dirty)">
-          Token input is required.
-      </mat-error></mat-form-field>
+<form [formGroup]="tokenForm">
+  <mat-form-field appearance="fill">
+    <mat-label>Token Name, Symbol, or Address</mat-label>
+    <input matInput formControlName="token" placeholder="e.g., Ethereum, ETH, 0x...">
+        <mat-error *ngIf="tokenInput?.hasError('required') && (tokenInput?.touched || tokenInput?.dirty)">
+            Token input is required.
+        </mat-error>
+  </mat-form-field>
+</form>

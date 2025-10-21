@@ -24,16 +24,17 @@ describe('TokenInputFormComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have a required tokenInput control', () => {
-    const tokenInputControl = component.tokenInput;
-    expect(tokenInputControl.valid).toBeFalse();
-    tokenInputControl.setValue('test');
-    expect(tokenInputControl.valid).toBeTrue();
+  it('should have a required token control within the form group', () => {
+    const tokenControl = component.tokenForm.get('token');
+    expect(tokenControl?.valid).toBeFalse();
+    tokenControl?.setValue('test');
+    expect(tokenControl?.valid).toBeTrue();
   });
 
-  it('should display required error when input is empty', () => {
-    const tokenInputControl = component.tokenInput;
-    tokenInputControl.setValue('');
+  it('should display required error when token input is empty', () => {
+    const tokenControl = component.tokenForm.get('token');
+    tokenControl?.setValue('');
+    tokenControl?.markAsTouched();
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('mat-error')).toBeTruthy();
