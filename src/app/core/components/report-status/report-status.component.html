@@ -1,0 +1,16 @@
+<div class="report-status" [ngClass]="status">
+  <ng-container [ngSwitch]="status">
+    <span *ngSwitchCase="'progress'">
+      <mat-icon>hourglass_empty</mat-icon> In Progress
+    </span>
+    <span *ngSwitchCase="'success'">
+      <mat-icon>check_circle</mat-icon> Success
+    </span>
+    <span *ngSwitchCase="'error'">
+      <mat-icon>error</mat-icon> Error
+    </span>
+    <span *ngSwitchCase="'pending'">
+      <mat-icon>watch_later</mat-icon> Pending
+    </span>
+  </ng-container>
+</div>
