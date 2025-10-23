@@ -1,0 +1,21 @@
+:host {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; /* Adjust as needed to center vertically within the viewport */
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+mat-card {
+  width: 100%;
+  max-width: 500px; /* Adjust for desired form width */
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+mat-form-field {
+  width: 100%;
+  margin-bottom: 15px;
+}
