@@ -1,4 +1,4 @@
-<div class="report-status" [ngClass]="status">
+<div class="report-status" [ngClass]="status">\n  <p>Report Status: {{ status }}</p>
   <ng-container [ngSwitch]="status">
     <span *ngSwitchCase="'progress'">
       <mat-icon>hourglass_empty</mat-icon> In Progress
