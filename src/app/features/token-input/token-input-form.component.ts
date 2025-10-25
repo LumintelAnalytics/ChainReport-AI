@@ -4,17 +4,19 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
+import { ReportService } from '../../core/services/report.service';
+import { ReportStatusComponent } from '../../core/components/report-status/report-status.component';
 
 @Component({
   selector: 'app-token-input-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatCardModule],  templateUrl: './token-input-form.component.html',
+  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatCardModule, ReportStatusComponent],  templateUrl: './token-input-form.component.html',
   styleUrl: './token-input-form.component.scss',
 })
 export class TokenInputFormComponent {
   tokenForm: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private reportService: ReportService) {
     this.tokenForm = this.fb.group({
       token: ['', Validators.required],
     });
@@ -22,5 +24,12 @@ export class TokenInputFormComponent {
 
   get tokenInput() {
     return this.tokenForm.get('token');
+  }
+
+  onSubmit(): void {
+    if (this.tokenForm.valid) {
+      const token = this.tokenForm.get('token')?.value;
+      this.reportService.generateReport(token).subscribe();
+    }
   }
 }

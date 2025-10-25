@@ -1,17 +1,17 @@
-<div class="report-status" [ngClass]="reportStatus">
-  <p>Report Status: {{ reportStatus }}</p>
-  <ng-container [ngSwitch]="reportStatus">
-    <span *ngSwitchCase="ReportStatus.IN_PROGRESS">
-      <mat-icon>hourglass_empty</mat-icon> In Progress
+<div class="report-status" *ngIf="(reportStatus$ | async) as status" [ngClass]="status">
+  <p>Report Status: {{ status }}</p>
+  <ng-container [ngSwitch]="status">
+    <span *ngSwitchCase="ReportStatus.Idle">
+      <mat-icon>watch_later</mat-icon> Idle
     </span>
-    <span *ngSwitchCase="ReportStatus.SUCCESS">
-      <mat-icon>check_circle</mat-icon> Success
+    <span *ngSwitchCase="ReportStatus.Generating">
+      <mat-icon>hourglass_empty</mat-icon> Generating Report...
     </span>
-    <span *ngSwitchCase="ReportStatus.ERROR">
-      <mat-icon>error</mat-icon> Error
+    <span *ngSwitchCase="ReportStatus.Generated">
+      <mat-icon>check_circle</mat-icon> Report Generated Successfully!
     </span>
-    <span *ngSwitchCase="ReportStatus.INITIAL">
-      <mat-icon>watch_later</mat-icon> Initial
+    <span *ngSwitchCase="ReportStatus.Error">
+      <mat-icon>error</mat-icon> Error Generating Report.
     </span>
   </ng-container>
 </div>

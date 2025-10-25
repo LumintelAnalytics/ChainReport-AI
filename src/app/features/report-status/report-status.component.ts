@@ -7,5 +7,9 @@ import { ReportStatus } from 'src/app/models/report-status.enum';
   styleUrls: ['./report-status.component.scss']
 })
 export class ReportStatusComponent {
+<<<<<<< HEAD
   @Input() reportStatus: ReportStatus = ReportStatus.INITIAL;
+=======
+  @Input() status: ReportStatus = ReportStatus.INITIAL;
+>>>>>>> 00890c3 (feat: Define ReportStatus enum and integrate into component)
 }
