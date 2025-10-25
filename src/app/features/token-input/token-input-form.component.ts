@@ -4,13 +4,14 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
 import { ReportService } from '../../core/services/report.service';
 import { ReportStatusComponent } from '../../core/components/report-status/report-status.component';
 
 @Component({
   selector: 'app-token-input-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatCardModule, ReportStatusComponent],  templateUrl: './token-input-form.component.html',
+  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatCardModule, MatButtonModule, ReportStatusComponent],  templateUrl: './token-input-form.component.html',
   styleUrl: './token-input-form.component.scss',
 })
 export class TokenInputFormComponent {
