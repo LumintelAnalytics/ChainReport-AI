@@ -9,6 +9,7 @@ import { ReportService } from '../../core/services/report.service';
 import { ReportStatusComponent } from '../../core/components/report-status/report-status.component';
 import { Subject } from 'rxjs';
 import { takeUntil, finalize } from 'rxjs/operators';
+import { ReportStatus } from '../../models/report-status.enum';
 
 @Component({
   selector: 'app-token-input-form',
@@ -35,17 +36,24 @@ export class TokenInputFormComponent implements OnDestroy {
 
   onSubmit(): void {
     if (this.tokenForm.valid) {
-      // const token = this.tokenForm.get('token')?.value; // Token is not needed for startReportGeneration
       this.loading = true;
       this.error = null;
       this.success = false;
 
       this.reportService.startReportGeneration();
-      // The service will handle status updates, so we just reset the form and set success here.
-      // The loading state will be managed by the ReportStatusComponent subscribing to the service.
-      this.success = true;
-      this.tokenForm.reset();
-      this.loading = false; // Reset loading immediately after starting generation
+      this.reportService.getStatus()
+        .pipe(
+          takeUntil(this.destroy$),
+          finalize(() => { this.loading = false; })
+        )
+        .subscribe(status => {
+          if (status === ReportStatus.COMPLETED) {
+            this.success = true;
+            this.tokenForm.reset();
+          } else if (status === ReportStatus.FAILED) {
+            this.error = 'Report generation failed';
+          }
+        });
     }
   }
 
