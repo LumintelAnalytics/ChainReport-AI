@@ -1,16 +1,17 @@
-<div class="report-status" [ngClass]="status">
-  <ng-container [ngSwitch]="status">
-    <span *ngSwitchCase="'progress'">
+<div class="report-status" [ngClass]="reportStatus">
+  <p>Report Status: {{ reportStatus }}</p>
+  <ng-container [ngSwitch]="reportStatus">
+    <span *ngSwitchCase="ReportStatus.IN_PROGRESS">
       <mat-icon>hourglass_empty</mat-icon> In Progress
     </span>
-    <span *ngSwitchCase="'success'">
+    <span *ngSwitchCase="ReportStatus.SUCCESS">
       <mat-icon>check_circle</mat-icon> Success
     </span>
-    <span *ngSwitchCase="'error'">
+    <span *ngSwitchCase="ReportStatus.ERROR">
       <mat-icon>error</mat-icon> Error
     </span>
-    <span *ngSwitchCase="'pending'">
-      <mat-icon>watch_later</mat-icon> Pending
+    <span *ngSwitchCase="ReportStatus.INITIAL">
+      <mat-icon>watch_later</mat-icon> Initial
     </span>
   </ng-container>
 </div>
