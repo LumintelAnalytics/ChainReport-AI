@@ -10,20 +10,20 @@
     margin-right: 8px;
   }
 
-  &.progress {
+  &.Idle {
+    background-color: #ffc107; /* Amber */
+    color: #333;
+  }
+
+  &.Generating {
     background-color: #2196f3; /* Blue */
   }
 
-  &.success {
+  &.Generated {
     background-color: #4caf50; /* Green */
   }
 
-  &.error {
+  &.Error {
     background-color: #f44336; /* Red */
-  }
-
-  &.pending {
-    background-color: #ffc107; /* Amber */
-    color: #333;
   }
 }

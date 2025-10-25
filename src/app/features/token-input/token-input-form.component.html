@@ -1,6 +1,6 @@
 <mat-card>
   <mat-card-content>
-    <form [formGroup]="tokenForm">
+    <form [formGroup]="tokenForm" (ngSubmit)="onSubmit()">
       <mat-form-field appearance="fill">
         <mat-label>Token Name, Symbol, or Address</mat-label>
         <input matInput formControlName="token" placeholder="e.g., Ethereum, ETH, 0x...">
@@ -8,6 +8,9 @@
                 Token input is required.
             </mat-error>
       </mat-form-field>
+      <button mat-raised-button color="primary" type="submit" [disabled]="tokenForm.invalid">Generate Report</button>
     </form>
   </mat-card-content>
 </mat-card>
+
+<app-report-status></app-report-status>
