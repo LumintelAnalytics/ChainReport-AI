@@ -7,5 +7,5 @@ import { ReportStatus } from 'src/app/models/report-status.enum';
   styleUrls: ['./report-status.component.scss']
 })
 export class ReportStatusComponent {
-  @Input() status: ReportStatus = ReportStatus.INITIAL;
+  @Input() reportStatus: ReportStatus = ReportStatus.INITIAL;
 }
