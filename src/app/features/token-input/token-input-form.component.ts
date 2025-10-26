@@ -9,6 +9,7 @@ import { ReportService } from '../../core/services/report.service';
 import { ReportStatusComponent } from '../../core/components/report-status/report-status.component';
 import { Subject } from 'rxjs';
 import { takeUntil, finalize } from 'rxjs/operators';
+import { ReportStatus } from '../../models/report-status.enum';
 
 @Component({
   selector: 'app-token-input-form',
@@ -35,24 +36,22 @@ export class TokenInputFormComponent implements OnDestroy {
 
   onSubmit(): void {
     if (this.tokenForm.valid) {
-      const token = this.tokenForm.get('token')?.value;
       this.loading = true;
       this.error = null;
       this.success = false;
 
-      this.reportService.generateReport(token)
+      this.reportService.startReportGeneration();
+      this.reportService.getStatus()
         .pipe(
           takeUntil(this.destroy$),
           finalize(() => { this.loading = false; })
         )
-        .subscribe({
-          next: () => {
+        .subscribe(status => {
+          if (status === ReportStatus.COMPLETED) {
             this.success = true;
             this.tokenForm.reset();
-          },
-          error: (err) => {
-            console.error('Failed to generate report:', err);
-            this.error = 'Failed to generate report. Please try again.';
+          } else if (status === ReportStatus.FAILED) {
+            this.error = 'Report generation failed';
           }
         });
     }
