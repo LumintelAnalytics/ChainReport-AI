@@ -50,11 +50,13 @@ describe('ReportService', () => {
   });
 
   it('should cancel report generation and return to IDLE status', (done) => {
+    let hasStarted = false;
     service.getStatus().subscribe(status => {
-      if (status === ReportStatus.IDLE) {
+      if (status === ReportStatus.IDLE && !hasStarted) {
+        hasStarted = true;
         service.startReportGeneration();
         service.cancelReportGeneration();
-      } else if (status === ReportStatus.IDLE) {
+      } else if (status === ReportStatus.IDLE && hasStarted) {
         expect(status).toBe(ReportStatus.IDLE);
         done();
       }
