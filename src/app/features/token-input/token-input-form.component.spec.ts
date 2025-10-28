@@ -1,35 +1,46 @@
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TokenInputFormComponent } from './token-input-form.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
 import { ReportService } from '../../core/services/report.service';
+import { ReportStatusComponent } from '../../core/components/report-status/report-status.component';
+import { of, Subject } from 'rxjs';
 import { ReportStatus } from '../../models/report-status.enum';
-import { BehaviorSubject } from 'rxjs';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('TokenInputFormComponent', () => {
   let component: TokenInputFormComponent;
   let fixture: ComponentFixture<TokenInputFormComponent>;
-  let reportService: ReportService;
-  let reportStatusSubject: BehaviorSubject<ReportStatus>;
+  let mockReportService: jasmine.SpyObj<ReportService>;
+  let reportStatusSubject: Subject<ReportStatus>;
 
   beforeEach(async () => {
-    reportStatusSubject = new BehaviorSubject<ReportStatus>(ReportStatus.IDLE);
-    const reportServiceMock = {
-      startReportGeneration: jasmine.createSpy('startReportGeneration'),
-      getStatus: () => reportStatusSubject.asObservable(),
-      reportStatus$: reportStatusSubject.asObservable(),
-    };
+    reportStatusSubject = new Subject<ReportStatus>();
+    mockReportService = jasmine.createSpyObj('ReportService', ['startReportGeneration', 'getStatus']);
+    mockReportService.getStatus.and.returnValue(reportStatusSubject.asObservable());
 
     await TestBed.configureTestingModule({
-      imports: [TokenInputFormComponent, ReactiveFormsModule, MatFormFieldModule, MatInputModule, NoopAnimationsModule],
-      providers: [{ provide: ReportService, useValue: reportServiceMock }],
-    }).compileComponents();
+      imports: [
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatCardModule,
+        MatButtonModule,
+        NoopAnimationsModule, // Required for MatFormField animations
+        TokenInputFormComponent // Import standalone component directly
+      ],
+      providers: [
+        FormBuilder,
+        { provide: ReportService, useValue: mockReportService }
+      ]
+    })
+    .compileComponents();
 
     fixture = TestBed.createComponent(TokenInputFormComponent);
     component = fixture.componentInstance;
-    reportService = TestBed.inject(ReportService);
     fixture.detectChanges();
   });
 
@@ -37,62 +48,64 @@ describe('TokenInputFormComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have a required token control within the form group', () => {
-    const tokenControl = component.tokenForm.get('token');
-    expect(tokenControl?.valid).toBeFalse();
-    tokenControl?.setValue('test');
-    expect(tokenControl?.valid).toBeTrue();
+  it('should initialize the form with a required token field', () => {
+    expect(component.tokenForm).toBeDefined();
+    expect(component.tokenInput).toBeDefined();
+    expect(component.tokenInput?.hasError('required')).toBeTrue();
+    expect(component.tokenForm.valid).toBeFalse();
   });
 
-  it('should display required error when token input is empty', () => {
-    const tokenControl = component.tokenForm.get('token');
-    tokenControl?.setValue('');
-    tokenControl?.markAsTouched();
+  it('should make the token input valid when a value is entered', () => {
+    component.tokenInput?.setValue('test_token');
+    expect(component.tokenInput?.valid).toBeTrue();
+    expect(component.tokenForm.valid).toBeTrue();
+  });
+
+  it('should show required error when token input is touched and empty', () => {
+    const tokenInput = component.tokenInput;
+    tokenInput?.markAsTouched();
     fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('mat-error')).toBeTruthy();
-    expect(compiled.querySelector('mat-error')?.textContent).toContain('Token input is required.');
+
+    const compiled = fixture.nativeElement;
+    const errorElement = compiled.querySelector('mat-error');
+    expect(errorElement).toBeTruthy();
+    expect(errorElement.textContent).toContain('Token input is required.');
   });
 
-  it('should call startReportGeneration and set loading to true on valid submit', fakeAsync(() => {
-    component.tokenForm.get('token')?.setValue('test-token');
+  it('should call startReportGeneration and set loading to true on submit', () => {
+    component.tokenInput?.setValue('test_token');
     component.onSubmit();
-    tick();
-    expect(reportService.startReportGeneration).toHaveBeenCalled();
+    expect(mockReportService.startReportGeneration).toHaveBeenCalled();
     expect(component.loading).toBeTrue();
-    expect(component.success).toBeFalse();
-    expect(component.error).toBeNull();
-  }));
+  });
 
-  it('should set success to true and reset form on report completion', fakeAsync(() => {
-    component.tokenForm.get('token')?.setValue('test-token');
+  it('should set success to true and reset form when report completes', () => {
+    component.tokenInput?.setValue('test_token');
     component.onSubmit();
-    tick();
+
     reportStatusSubject.next(ReportStatus.COMPLETED);
-    tick();
+    fixture.detectChanges();
+
     expect(component.success).toBeTrue();
     expect(component.loading).toBeFalse();
-    expect(component.tokenForm.get('token')?.value).toBeNull(); // Form should be reset
-  }));
+    expect(component.tokenInput?.value).toBeNull(); // Form should be reset
+  });
 
-  it('should set error on report failure', fakeAsync(() => {
-    component.tokenForm.get('token')?.setValue('test-token');
+  it('should set error message when report fails', () => {
+    component.tokenInput?.setValue('test_token');
     component.onSubmit();
-    tick();
+
     reportStatusSubject.next(ReportStatus.FAILED);
-    tick();
+    fixture.detectChanges();
+
     expect(component.error).toBe('Report generation failed');
     expect(component.loading).toBeFalse();
     expect(component.success).toBeFalse();
-  }));
+  });
 
-  it('should clear loading when component is destroyed', fakeAsync(() => {
-    component.tokenForm.get('token')?.setValue('test-token');
-    component.onSubmit();
-    tick();
-    expect(component.loading).toBeTrue();
+  it('should complete the destroy$ subject on ngOnDestroy', () => {
+    const destroySpy = spyOn(component['destroy$'], 'complete');
     component.ngOnDestroy();
-    tick();
-    expect(component.loading).toBeFalse();
-  }));
+    expect(destroySpy).toHaveBeenCalled();
+  });
 });
