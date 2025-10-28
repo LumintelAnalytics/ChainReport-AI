@@ -5,6 +5,7 @@
   border-radius: 4px;
   font-weight: bold;
   color: #fff;
+  flex-wrap: wrap; // Allow items to wrap if space is constrained
 
   mat-icon {
     margin-right: 8px;
@@ -25,5 +26,12 @@
 
   &.Error {
     background-color: #f44336; /* Red */
+  }
+}
+
+@media (max-width: 768px) {
+  .report-status {
+    padding: 6px 10px; // Slightly reduce padding
+    font-size: 0.9em; // Slightly reduce font size
   }
 }
