@@ -8,7 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { ReportService } from '../../core/services/report.service';
 import { ReportStatusComponent } from '../../core/components/report-status/report-status.component';
 import { Subject } from 'rxjs';
-import { takeUntil, finalize } from 'rxjs/operators';
+import { takeUntil, finalize, first } from 'rxjs/operators';
 import { ReportStatus } from '../../models/report-status.enum';
 
 @Component({
@@ -36,18 +36,14 @@ export class TokenInputFormComponent implements OnDestroy {
 
   onSubmit(): void {
     if (this.tokenForm.valid) {
-<<<<<<< HEAD
-=======
-      // const token = this.tokenForm.get('token')?.value; // Token is not needed for startReportGeneration
->>>>>>> c620bf2 (feat: Implement ReportService for status management)
       this.loading = true;
       this.error = null;
       this.success = false;
 
       this.reportService.startReportGeneration();
-<<<<<<< HEAD
       this.reportService.getStatus()
         .pipe(
+          first(status => status === ReportStatus.COMPLETED || status === ReportStatus.FAILED),
           takeUntil(this.destroy$),
           finalize(() => { this.loading = false; })
         )
@@ -55,17 +51,10 @@ export class TokenInputFormComponent implements OnDestroy {
           if (status === ReportStatus.COMPLETED) {
             this.success = true;
             this.tokenForm.reset();
-          } else if (status === ReportStatus.FAILED) {
+          } else {
             this.error = 'Report generation failed';
           }
         });
-=======
-      // The service will handle status updates, so we just reset the form and set success here.
-      // The loading state will be managed by the ReportStatusComponent subscribing to the service.
-      this.success = true;
-      this.tokenForm.reset();
-      this.loading = false; // Reset loading immediately after starting generation
->>>>>>> c620bf2 (feat: Implement ReportService for status management)
     }
   }
 
