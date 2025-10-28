@@ -1,8 +1,14 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Ensure the layout takes full viewport height */
+}
+
 .main-content {
+  flex-grow: 1; /* Allows main-content to take up available space */
   padding: 20px;
-  display: grid;
-  grid-template-rows: 1fr; /* Takes up remaining space */
-  min-height: calc(100vh - 64px - 64px); /* Adjust 64px for header/footer height */
+  display: flex; /* Use flex for internal content alignment if needed */
+  flex-direction: column; /* Stack content vertically */
 }
 
 /* Basic responsive adjustments */

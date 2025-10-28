@@ -36,11 +36,16 @@ export class TokenInputFormComponent implements OnDestroy {
 
   onSubmit(): void {
     if (this.tokenForm.valid) {
+<<<<<<< HEAD
+=======
+      // const token = this.tokenForm.get('token')?.value; // Token is not needed for startReportGeneration
+>>>>>>> c620bf2 (feat: Implement ReportService for status management)
       this.loading = true;
       this.error = null;
       this.success = false;
 
       this.reportService.startReportGeneration();
+<<<<<<< HEAD
       this.reportService.getStatus()
         .pipe(
           takeUntil(this.destroy$),
@@ -54,6 +59,13 @@ export class TokenInputFormComponent implements OnDestroy {
             this.error = 'Report generation failed';
           }
         });
+=======
+      // The service will handle status updates, so we just reset the form and set success here.
+      // The loading state will be managed by the ReportStatusComponent subscribing to the service.
+      this.success = true;
+      this.tokenForm.reset();
+      this.loading = false; // Reset loading immediately after starting generation
+>>>>>>> c620bf2 (feat: Implement ReportService for status management)
     }
   }
 

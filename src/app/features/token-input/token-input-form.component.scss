@@ -1,10 +1,10 @@
 :host {
   display: flex;
   justify-content: center;
-  align-items: center;
-  min-height: 100vh; /* Adjust as needed to center vertically within the viewport */
+  align-items: flex-start; // Align to start, let parent handle vertical centering if needed
   padding: 20px;
   box-sizing: border-box;
+  width: 100%; // Ensure it takes full width available
 }
 
 mat-card {
@@ -18,4 +18,14 @@ mat-card {
 mat-form-field {
   width: 100%;
   margin-bottom: 15px;
+}
+
+@media (max-width: 768px) {
+  :host {
+    padding: 10px; // Reduce padding on smaller screens
+  }
+
+  mat-card {
+    padding: 15px; // Reduce card padding
+  }
 }
