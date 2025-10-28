@@ -95,4 +95,29 @@ describe('TokenInputFormComponent', () => {
     tick();
     expect(component.loading).toBeFalse();
   }));
+
+  it('should disable the submit button when the form is invalid', () => {
+    const submitButton = fixture.nativeElement.querySelector('button[type="submit"]');
+    expect(submitButton.disabled).toBeTrue();
+    component.tokenForm.get('token')?.setValue('valid-token');
+    fixture.detectChanges();
+    expect(submitButton.disabled).toBeFalse();
+  });
+
+  it('should disable the submit button when loading is true', fakeAsync(() => {
+    const submitButton = fixture.nativeElement.querySelector('button[type="submit"]');
+    component.tokenForm.get('token')?.setValue('valid-token');
+    fixture.detectChanges();
+    expect(submitButton.disabled).toBeFalse();
+    component.onSubmit();
+    tick();
+    fixture.detectChanges();
+    expect(submitButton.disabled).toBeTrue();
+  }));
+
+  it('should have initial loading, error, and success states as false/null', () => {
+    expect(component.loading).toBeFalse();
+    expect(component.error).toBeNull();
+    expect(component.success).toBeFalse();
+  });
 });
