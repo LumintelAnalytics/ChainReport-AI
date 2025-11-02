@@ -1,8 +1,10 @@
-<mat-toolbar color="primary">
-  <img src="assets/logo.svg" alt="Logo" class="header-logo">
-  <span>ChainReport-AI</span>
+<mat-toolbar color="primary" role="navigation" aria-label="Main navigation">
+  <div class="header-brand">
+    <img src="assets/logo.svg" alt="ChainReport-AI Logo" class="header-logo">
+    <span class="app-title">ChainReport-AI</span>
+  </div>
   <span class="spacer"></span>
-  <a mat-button routerLink="/home" routerLinkActive="active">Home</a>
-  <a mat-button routerLink="/generate-report" routerLinkActive="active">Generate Report</a>
-  <a mat-button routerLink="/settings" routerLinkActive="active">Settings</a>
+  <a mat-button routerLink="/home" routerLinkActive="active" aria-label="Home">Home</a>
+  <a mat-button routerLink="/generate-report" routerLinkActive="active" aria-label="Generate Report">Generate Report</a>
+  <a mat-button routerLink="/settings" routerLinkActive="active" aria-label="Settings">Settings</a>
 </mat-toolbar>
