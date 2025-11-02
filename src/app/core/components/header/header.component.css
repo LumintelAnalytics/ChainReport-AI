@@ -3,6 +3,16 @@
   margin-right: 10px;
 }
 
+.header-brand {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.app-title {
+  white-space: nowrap;
+}
+
 .spacer {
   flex: 1 1 auto;
 }
