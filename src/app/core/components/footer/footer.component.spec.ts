@@ -30,4 +30,24 @@ describe('FooterComponent', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('footer p:last-child')?.textContent).toContain(`Version: ${environment.version}`);
   });
+
+  it('should display privacy policy link', () => {
+    const compiled = fixture.nativeElement as HTMLElement;
+    const privacyLink = compiled.querySelector('.footer-links a:nth-child(1)') as HTMLAnchorElement;
+    expect(privacyLink).toBeTruthy();
+    expect(privacyLink.textContent).toContain('Privacy Policy');
+    expect(privacyLink.href).toContain('https://www.example.com/privacy');
+    expect(privacyLink.target).toBe('_blank');
+    expect(privacyLink.rel).toBe('noopener noreferrer');
+  });
+
+  it('should display terms of service link', () => {
+    const compiled = fixture.nativeElement as HTMLElement;
+    const termsLink = compiled.querySelector('.footer-links a:nth-child(2)') as HTMLAnchorElement;
+    expect(termsLink).toBeTruthy();
+    expect(termsLink.textContent).toContain('Terms of Service');
+    expect(termsLink.href).toContain('https://www.example.com/terms');
+    expect(termsLink.target).toBe('_blank');
+    expect(termsLink.rel).toBe('noopener noreferrer');
+  });
 });
