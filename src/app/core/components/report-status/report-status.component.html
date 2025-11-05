@@ -1,16 +1,16 @@
 <div class="report-status" *ngIf="(reportStatus$ | async) as status" [ngClass]="status">
-  <p>Report Status: {{ status }}</p>
+  <p>Report Status: {{ getReportStatusLabel(status) }}</p>
   <ng-container [ngSwitch]="status">
-    <span *ngSwitchCase="ReportStatus.Idle">
+    <span *ngSwitchCase="ReportStatus.IDLE">
       <mat-icon>watch_later</mat-icon> Idle
     </span>
-    <span *ngSwitchCase="ReportStatus.Generating">
+    <span *ngSwitchCase="ReportStatus.GENERATING">
       <mat-icon>hourglass_empty</mat-icon> Generating Report...
     </span>
-    <span *ngSwitchCase="ReportStatus.Generated">
+    <span *ngSwitchCase="ReportStatus.COMPLETED">
       <mat-icon>check_circle</mat-icon> Report Generated Successfully!
     </span>
-    <span *ngSwitchCase="ReportStatus.Error">
+    <span *ngSwitchCase="ReportStatus.FAILED">
       <mat-icon>error</mat-icon> Error Generating Report.
     </span>
   </ng-container>
