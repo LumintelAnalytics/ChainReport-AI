@@ -20,6 +20,13 @@ mat-form-field {
   margin-bottom: 15px;
 }
 
+mat-error {
+  color: #f44336; /* Material Design Red 500 */
+  font-size: 12px;
+  margin-top: -10px; /* Adjust spacing */
+  margin-bottom: 10px;
+}
+
 @media (max-width: 768px) {
   :host {
     padding: 10px; // Reduce padding on smaller screens
