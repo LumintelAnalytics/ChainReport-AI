@@ -1,5 +1,7 @@
 @use '@angular/material' as mat;
 
+$primary-color: mat.get-color-from-palette(mat.$blue-grey-palette, 700);
+
 // Define a custom typography configuration
 $custom-typography: mat.define-typography-config(
   $font-family: 'Roboto, "Helvetica Neue", sans-serif',

@@ -1,3 +1,5 @@
+@import 'src/styles/_theme.scss';
+
 .header-logo {
   height: 30px;
   margin-right: 10px;
@@ -7,6 +9,7 @@
   display: flex;
   align-items: center;
   white-space: nowrap;
+  color: $primary-color;
 }
 
 .app-title {
