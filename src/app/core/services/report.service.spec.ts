@@ -84,6 +84,73 @@ describe('ReportService', () => {
     req.error(new ProgressEvent('error'), { status: 404, statusText: 'Not Found' });
   });
 
+  it('should emit a ReportError on HTTP error during generateReport', (done) => {
+    const testToken = 'test-token-123';
+    const errorMessage = 'deliberate 400 error';
+
+    service.reportError$.subscribe(error => {
+      expect(error.message).toBe('Invalid token identifier. Please check your input.');
+      expect(error.statusCode).toBe(400);
+      done();
+    });
+
+    service.generateReport(testToken).subscribe({
+      error: () => { }
+    });
+
+    const req = httpTestingController.expectOne('/api/v1/report/generate');
+    req.error(new ProgressEvent('error'), { status: 400, statusText: 'Bad Request' });
+  });
+
+  it('should emit a ReportError when backend returns ERROR status during generateReport', (done) => {
+    const testToken = 'test-token-123';
+    const mockErrorResponse = { reportId: '', status: 'ERROR', message: 'Invalid token provided.' };
+
+    service.reportError$.subscribe(error => {
+      expect(error.message).toBe('Invalid token provided.');
+      done();
+    });
+
+    service.generateReport(testToken).subscribe();
+
+    const req = httpTestingController.expectOne('/api/v1/report/generate');
+    req.flush(mockErrorResponse);
+  });
+
+  it('should emit a ReportError on HTTP error during pollReportStatus', (done) => {
+    const reportId = 'report-456';
+    const mockGenerateResponse = { reportId: reportId, status: 'PENDING' };
+
+    service.generateReport('test-token').subscribe();
+    httpTestingController.expectOne('/api/v1/report/generate').flush(mockGenerateResponse);
+
+    service.reportError$.subscribe(error => {
+      expect(error.message).toBe('A server error occurred. Please try again later.');
+      expect(error.statusCode).toBe(500);
+      done();
+    });
+
+    const req = httpTestingController.expectOne(`/api/v1/report/status/${reportId}`);
+    req.error(new ProgressEvent('error'), { status: 500, statusText: 'Internal Server Error' });
+  });
+
+  it('should emit a ReportError when backend returns ERROR status during pollReportStatus', (done) => {
+    const reportId = 'report-456';
+    const mockGenerateResponse = { reportId: reportId, status: 'PENDING' };
+    const mockPollErrorResponse = { reportId: reportId, status: 'ERROR', message: 'Report processing failed.' };
+
+    service.generateReport('test-token').subscribe();
+    httpTestingController.expectOne('/api/v1/report/generate').flush(mockGenerateResponse);
+
+    service.reportError$.subscribe(error => {
+      expect(error.message).toBe('Report processing failed.');
+      done();
+    });
+
+    const req = httpTestingController.expectOne(`/api/v1/report/status/${reportId}`);
+    req.flush(mockPollErrorResponse);
+  });
+
   it('should not clear timeout on ngOnDestroy', () => {
     const clearTimeoutSpy = spyOn(window, 'clearTimeout');
     service.ngOnDestroy();
