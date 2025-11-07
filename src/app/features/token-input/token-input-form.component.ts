@@ -24,7 +24,6 @@ export class TokenInputFormComponent implements OnDestroy {
   loading = false;
   error: string | null = null;
   success = false;
-  reportSubmitted = false;
 
   constructor(private fb: FormBuilder, private reportService: ReportService) {
     this.tokenForm = this.fb.group({
@@ -41,7 +40,6 @@ export class TokenInputFormComponent implements OnDestroy {
       this.loading = true;
       this.error = null;
       this.success = false;
-      this.reportSubmitted = true;
 
       const token = this.tokenForm.get('token')?.value;
 
@@ -55,7 +53,6 @@ export class TokenInputFormComponent implements OnDestroy {
         takeUntil(this.destroy$),
         finalize(() => {
           this.loading = false;
-          this.reportSubmitted = false;
         })
       ).subscribe({
         next: (status) => {
