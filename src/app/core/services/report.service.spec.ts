@@ -1,13 +1,23 @@
 import { TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { ReportService } from './report.service';
 import { ReportStatus } from '../../models/report-status.enum';
 
 describe('ReportService', () => {
   let service: ReportService;
+  let httpTestingController: HttpTestingController;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
+      providers: [ReportService]
+    });
     service = TestBed.inject(ReportService);
+    httpTestingController = TestBed.inject(HttpTestingController);
+  });
+
+  afterEach(() => {
+    httpTestingController.verify();
   });
 
   it('should be created', () => {
@@ -21,52 +31,62 @@ describe('ReportService', () => {
     });
   });
 
-  it('should transition from IDLE to GENERATING and then to COMPLETED', (done) => {
+  it('should send a POST request to generate a report', (done) => {
+    const testToken = 'test-token-123';
+    const mockResponse = { reportId: 'report-456', status: 'PENDING' };
+
+    service.generateReport(testToken).subscribe(response => {
+      expect(response).toEqual(mockResponse);
+      done();
+    });
+
+    const req = httpTestingController.expectOne('/api/v1/report/generate');
+    expect(req.request.method).toEqual('POST');
+    expect(req.request.body).toEqual({ tokenIdentifier: testToken });
+
+    req.flush(mockResponse);
+  });
+
+  it('should set status to GENERATING when generateReport is called', (done) => {
+    const testToken = 'test-token-123';
+    const mockResponse = { reportId: 'report-456', status: 'PENDING' };
+
     service.getStatus().subscribe(status => {
-      if (status === ReportStatus.IDLE) {
-        service.startReportGeneration();
-      } else if (status === ReportStatus.GENERATING) {
-        // Expect GENERATING status, then wait for COMPLETED
-      } else if (status === ReportStatus.COMPLETED) {
-        expect(status).toBe(ReportStatus.COMPLETED);
+      if (status === ReportStatus.GENERATING) {
+        expect(status).toBe(ReportStatus.GENERATING);
         done();
       }
     });
+
+    service.generateReport(testToken).subscribe();
+    const req = httpTestingController.expectOne('/api/v1/report/generate');
+    req.flush(mockResponse);
   });
 
-  it('should clear previous timeouts and start a new generation on consecutive calls', (done) => {
-    let generationCount = 0;
+  it('should set status to ERROR on HTTP error', (done) => {
+    const testToken = 'test-token-123';
+    const errorMessage = 'deliberate 404 error';
+
     service.getStatus().subscribe(status => {
-      if (status === ReportStatus.IDLE && generationCount === 0) {
-        service.startReportGeneration();
-        generationCount++;
-        // Immediately call again to test concurrency prevention
-        service.startReportGeneration();
-      } else if (status === ReportStatus.COMPLETED) {
-        expect(generationCount).toBe(1); // Only one generation should complete
+      if (status === ReportStatus.ERROR) {
+        expect(status).toBe(ReportStatus.ERROR);
         done();
       }
     });
-  });
 
-  it('should cancel report generation and return to IDLE status', (done) => {
-    let hasStarted = false;
-    service.getStatus().subscribe(status => {
-      if (status === ReportStatus.IDLE && !hasStarted) {
-        hasStarted = true;
-        service.startReportGeneration();
-        service.cancelReportGeneration();
-      } else if (status === ReportStatus.IDLE && hasStarted) {
-        expect(status).toBe(ReportStatus.IDLE);
-        done();
+    service.generateReport(testToken).subscribe({
+      error: (error) => {
+        expect(error.message).toContain('Failed to generate report');
       }
     });
+
+    const req = httpTestingController.expectOne('/api/v1/report/generate');
+    req.error(new ProgressEvent('error'), { status: 404, statusText: 'Not Found' });
   });
 
-  it('should clear timeout on ngOnDestroy', () => {
-    service.startReportGeneration();
+  it('should not clear timeout on ngOnDestroy', () => {
     const clearTimeoutSpy = spyOn(window, 'clearTimeout');
     service.ngOnDestroy();
-    expect(clearTimeoutSpy).toHaveBeenCalled();
+    expect(clearTimeoutSpy).not.toHaveBeenCalled();
   });
 });

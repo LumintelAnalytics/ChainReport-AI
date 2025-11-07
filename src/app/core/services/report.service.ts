@@ -1,35 +1,48 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
 import { ReportStatus } from '../../models/report-status.enum';
+
+interface GenerateReportRequest {
+  tokenIdentifier: string;
+}
+
+interface GenerateReportResponse {
+  reportId: string;
+  status: string; // e.g., 'PENDING', 'ERROR'
+  message?: string; // Optional message for errors or status updates
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class ReportService implements OnDestroy {
-  private generationTimeout: ReturnType<typeof setTimeout> | null = null;
   private reportStatusSubject: BehaviorSubject<ReportStatus> = new BehaviorSubject<ReportStatus>(ReportStatus.IDLE);
   public reportStatus$: Observable<ReportStatus> = this.reportStatusSubject.asObservable();
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
-  startReportGeneration(): void {
-    if (this.generationTimeout) {
-      clearTimeout(this.generationTimeout);
-    }
+  generateReport(token: string): Observable<GenerateReportResponse> {
     this.setStatus(ReportStatus.GENERATING);
-    // Simulate report generation process
-    this.generationTimeout = setTimeout(() => {
-      this.setStatus(ReportStatus.COMPLETED);
-      this.generationTimeout = null;
-    }, 5000); // Simulate a 5-second generation time
-  }
-
-  cancelReportGeneration(): void {
-    if (this.generationTimeout) {
-      clearTimeout(this.generationTimeout);
-      this.generationTimeout = null;
-    }
-    this.setStatus(ReportStatus.IDLE);
+    const requestBody: GenerateReportRequest = { tokenIdentifier: token };
+    return this.http.post<GenerateReportResponse>('/api/v1/report/generate', requestBody)
+      .pipe(
+        tap(response => {
+          if (response.status === 'PENDING') {
+            console.log(`Report generation initiated with ID: ${response.reportId}`);
+            // Potentially start polling for report status here
+          } else if (response.status === 'ERROR') {
+            console.error(`Error initiating report generation: ${response.message}`);
+            this.setStatus(ReportStatus.ERROR);
+          }
+        }),
+        catchError(error => {
+          console.error('HTTP error during report generation:', error);
+          this.setStatus(ReportStatus.ERROR);
+          return throwError(() => new Error('Failed to generate report'));
+        })
+      );
   }
 
   setStatus(status: ReportStatus): void {
@@ -41,9 +54,6 @@ export class ReportService implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.generationTimeout) {
-      clearTimeout(this.generationTimeout);
-      this.generationTimeout = null;
-    }
+    // No specific cleanup needed for HTTP client, but keeping the method for consistency
   }
 }
