@@ -8,7 +8,10 @@
                 Token input is required.
             </mat-error>
       </mat-form-field>
-      <button mat-raised-button color="primary" type="submit" [disabled]="tokenForm.invalid || loading">Generate Report</button>
+      <button mat-raised-button color="primary" type="submit" [disabled]="tokenForm.invalid || loading">
+        <span *ngIf="!loading">Generate Report</span>
+        <mat-spinner *ngIf="loading" [diameter]="24"></mat-spinner>
+      </button>
     </form>
   </mat-card-content>
 </mat-card>
