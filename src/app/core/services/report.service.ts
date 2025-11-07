@@ -58,7 +58,8 @@ export class ReportService implements OnDestroy {
           errorMessage = `An unexpected error occurred. Status: ${error.status}`;
       }
     }
-    return { message: errorMessage, statusCode: error.status, originalError: error };
+    const statusCode = (error.error instanceof ErrorEvent || error.status === 0) ? undefined : error.status;
+    return { message: errorMessage, statusCode: statusCode, originalError: error };
   }
 
   generateReport(token: string): Observable<GenerateReportResponse> {
@@ -71,7 +72,10 @@ export class ReportService implements OnDestroy {
             console.log(`Report generation initiated with ID: ${response.reportId}`);
             this.pollingSubscription = this.pollReportStatus(response.reportId).subscribe();
           } else if (response.status === 'ERROR') {
-            const error: ReportError = { message: response.message || 'Unknown error during report generation initiation.' };
+            const error: ReportError = {
+              message: response.message || 'Unknown error during report generation initiation.',
+              statusCode: 0 // Sentinel for backend-reported errors without a specific HTTP status
+            };
             console.error(`Error initiating report generation: ${error.message}`);
             this.setStatus(ReportStatus.ERROR);
             this.errorSubject.next(error);
@@ -95,7 +99,10 @@ export class ReportService implements OnDestroy {
           this.setStatus(ReportStatus.SUCCESS);
           console.log(`Report ${reportId} completed successfully.`);
         } else if (response.status === 'ERROR') {
-          const error: ReportError = { message: response.message || `Report ${reportId} failed with an unknown error.` };
+          const error: ReportError = {
+            message: response.message || `Report ${reportId} failed with an unknown error.`,
+            statusCode: 500 // Default to 500 for backend-reported errors during polling
+          };
           this.setStatus(ReportStatus.ERROR);
           console.error(`Report ${reportId} failed: ${error.message}`);
           this.errorSubject.next(error);
