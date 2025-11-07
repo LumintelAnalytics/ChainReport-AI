@@ -9,7 +9,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ReportService } from '../../core/services/report.service';
 import { ReportStatusComponent } from '../../core/components/report-status/report-status.component';
 import { Subject } from 'rxjs';
-import { takeUntil, finalize, first } from 'rxjs/operators';
+import { takeUntil, finalize, first, switchMap, filter } from 'rxjs/operators';
 import { ReportStatus } from '../../models/report-status.enum';
 
 @Component({
@@ -42,38 +42,34 @@ export class TokenInputFormComponent implements OnDestroy {
       this.success = false;
 
       const token = this.tokenForm.get('token')?.value;
-      if (!token) {
-        this.error = 'Token is required.';
-        return;
-      }
 
-      this.reportService.generateReport(token)
-        .pipe(
-          takeUntil(this.destroy$),
-          finalize(() => { this.loading = false; })
-        )
-        .subscribe({
-          next: () => {
-            // ReportService handles status updates internally, we just need to react to them
-            this.reportService.reportStatus$
-              .pipe(
-                first(status => status === ReportStatus.SUCCESS || status === ReportStatus.ERROR),
-                takeUntil(this.destroy$)
-              )
-              .subscribe(status => {
-                if (status === ReportStatus.SUCCESS) {
-                  this.success = true;
-                  this.tokenForm.reset();
-                } else if (status === ReportStatus.ERROR) {
-                  this.error = 'Report generation failed.';
-                }
-              });
-          },
-          error: (err) => {
-            this.error = err.message || 'An unexpected error occurred during report generation.';
+      this.reportService.generateReport(token).pipe(
+        switchMap(() =>
+          this.reportService.reportStatus$.pipe(
+            filter(status => status === ReportStatus.SUCCESS || status === ReportStatus.ERROR),
+            first()
+          )
+        ),
+        takeUntil(this.destroy$),
+        finalize(() => {
+          this.loading = false;
+        })
+      ).subscribe({
+        next: (status) => {
+          if (status === ReportStatus.SUCCESS) {
+            this.success = true;
+            this.error = null;
+            this.tokenForm.reset();
+          } else if (status === ReportStatus.ERROR) {
+            this.error = 'Report generation failed.';
             this.success = false;
           }
-        });
+        },
+        error: (err) => {
+          this.error = err.message || 'An unexpected error occurred during report generation.';
+          this.success = false;
+        }
+      });
     }
   }
 
