@@ -5,6 +5,8 @@ import { catchError, tap, switchMap, takeWhile } from 'rxjs/operators';
 import { ReportStatus } from '../../models/report-status.enum';
 import { HttpErrorResponse } from '@angular/common/http';
 
+export const REPORT_ERROR_STATUS_SENTINEL = 500;
+
 export interface ReportError {
   message: string;
   statusCode?: number;
@@ -58,7 +60,7 @@ export class ReportService implements OnDestroy {
           errorMessage = `An unexpected error occurred. Status: ${error.status}`;
       }
     }
-    const statusCode = (error.error instanceof ErrorEvent || error.status === 0) ? undefined : error.status;
+    const statusCode = (error.error instanceof ErrorEvent || error.status === 0 || error.status === REPORT_ERROR_STATUS_SENTINEL) ? undefined : error.status;
     return { message: errorMessage, statusCode: statusCode, originalError: error };
   }
 
@@ -74,7 +76,7 @@ export class ReportService implements OnDestroy {
           } else if (response.status === 'ERROR') {
             const error: ReportError = {
               message: response.message || 'Unknown error during report generation initiation.',
-              statusCode: 0 // Sentinel for backend-reported errors without a specific HTTP status
+              statusCode: REPORT_ERROR_STATUS_SENTINEL // Sentinel for backend-reported errors without a specific HTTP status
             };
             console.error(`Error initiating report generation: ${error.message}`);
             this.setStatus(ReportStatus.ERROR);
@@ -101,7 +103,7 @@ export class ReportService implements OnDestroy {
         } else if (response.status === 'ERROR') {
           const error: ReportError = {
             message: response.message || `Report ${reportId} failed with an unknown error.`,
-            statusCode: 500 // Default to 500 for backend-reported errors during polling
+            statusCode: REPORT_ERROR_STATUS_SENTINEL // Default to 500 for backend-reported errors during polling
           };
           this.setStatus(ReportStatus.ERROR);
           console.error(`Report ${reportId} failed: ${error.message}`);
