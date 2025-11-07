@@ -1,7 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, throwError, interval } from 'rxjs';
+import { catchError, tap, switchMap, takeWhile } from 'rxjs/operators';
 import { ReportStatus } from '../../models/report-status.enum';
 
 interface GenerateReportRequest {
