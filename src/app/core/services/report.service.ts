@@ -1,8 +1,54 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, throwError, interval, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, throwError, interval, Subscription, Subject } from 'rxjs';
 import { catchError, tap, switchMap, takeWhile } from 'rxjs/operators';
 import { ReportStatus } from '../../models/report-status.enum';
+import { HttpErrorResponse } from '@angular/common/http';
+
+export interface ReportError {
+  message: string;
+  statusCode?: number;
+  originalError?: any;
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ReportService implements OnDestroy {
+  private reportStatusSubject: BehaviorSubject<ReportStatus> = new BehaviorSubject<ReportStatus>(ReportStatus.IDLE);
+  public reportStatus$: Observable<ReportStatus> = this.reportStatusSubject.asObservable();
+  private errorSubject: Subject<ReportError> = new Subject<ReportError>();
+  public reportError$: Observable<ReportError> = this.errorSubject.asObservable();
+  private pollingSubscription: Subscription | undefined;
+
+  constructor(private http: HttpClient) { }
+
+  private handleError(error: HttpErrorResponse): ReportError {
+    let errorMessage: string;
+    if (error.error instanceof ErrorEvent) {
+      // Client-side error
+      errorMessage = `A client-side error occurred: ${error.error.message}`;
+    } else {
+      // Server-side error
+      switch (error.status) {
+        case 400:
+          errorMessage = 'Invalid token identifier. Please check your input.';
+          break;
+        case 401:
+          errorMessage = 'Unauthorized: Please log in again.';
+          break;
+        case 404:
+          errorMessage = 'The requested report or API endpoint was not found.';
+          break;
+        case 500:
+          errorMessage = 'A server error occurred. Please try again later.';
+          break;
+        default:
+          errorMessage = `An unexpected error occurred. Status: ${error.status}`;
+      }
+    }
+    return { message: errorMessage, statusCode: error.status, originalError: error };
+  }
 
 interface GenerateReportRequest {
   tokenIdentifier: string;
@@ -34,14 +80,18 @@ export class ReportService implements OnDestroy {
             console.log(`Report generation initiated with ID: ${response.reportId}`);
             this.pollingSubscription = this.pollReportStatus(response.reportId).subscribe();
           } else if (response.status === 'ERROR') {
-            console.error(`Error initiating report generation: ${response.message}`);
+            const error: ReportError = { message: response.message || 'Unknown error during report generation initiation.' };
+            console.error(`Error initiating report generation: ${error.message}`);
             this.setStatus(ReportStatus.ERROR);
+            this.errorSubject.next(error);
           }
         }),
-        catchError(error => {
-          console.error('HTTP error during report generation:', error);
+        catchError((error: HttpErrorResponse) => {
+          const reportError = this.handleError(error);
+          console.error('HTTP error during report generation:', reportError);
           this.setStatus(ReportStatus.ERROR);
-          return throwError(() => new Error('Failed to generate report'));
+          this.errorSubject.next(reportError);
+          return throwError(() => reportError);
         })
       );
   }
@@ -54,17 +104,21 @@ export class ReportService implements OnDestroy {
           this.setStatus(ReportStatus.SUCCESS);
           console.log(`Report ${reportId} completed successfully.`);
         } else if (response.status === 'ERROR') {
+          const error: ReportError = { message: response.message || `Report ${reportId} failed with an unknown error.` };
           this.setStatus(ReportStatus.ERROR);
-          console.error(`Report ${reportId} failed: ${response.message}`);
+          console.error(`Report ${reportId} failed: ${error.message}`);
+          this.errorSubject.next(error);
         } else {
           this.setStatus(ReportStatus.GENERATING); // Still pending or processing
         }
       }),
       takeWhile(response => response.status !== 'SUCCESS' && response.status !== 'ERROR', true),
-      catchError(error => {
-        console.error(`HTTP error during polling for report ${reportId}:`, error);
+      catchError((error: HttpErrorResponse) => {
+        const reportError = this.handleError(error);
+        console.error(`HTTP error during polling for report ${reportId}:`, reportError);
         this.setStatus(ReportStatus.ERROR);
-        return throwError(() => new Error(`Failed to poll report status for ${reportId}`));
+        this.errorSubject.next(reportError);
+        return throwError(() => reportError);
       })
     );
   }
