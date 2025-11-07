@@ -1,38 +1,19 @@
-:host {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start; // Align to start, let parent handle vertical centering if needed
-  padding: 20px;
-  box-sizing: border-box;
-  width: 100%; // Ensure it takes full width available
-}
-
 mat-card {
-  width: 100%;
-  max-width: 500px; /* Adjust for desired form width */
-  padding: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
+  max-width: 400px;
+  margin: 2em auto;
+  text-align: center;
 }
 
 mat-form-field {
   width: 100%;
-  margin-bottom: 15px;
 }
 
-mat-error {
-  color: #f44336; /* Material Design Red 500 */
-  font-size: 12px;
-  margin-top: -10px; /* Adjust spacing */
-  margin-bottom: 10px;
-}
-
-@media (max-width: 768px) {
-  :host {
-    padding: 10px; // Reduce padding on smaller screens
-  }
-
-  mat-card {
-    padding: 15px; // Reduce card padding
+button {
+  position: relative;
+  .mat-spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 }
