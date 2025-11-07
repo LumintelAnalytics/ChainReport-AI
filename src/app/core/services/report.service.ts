@@ -11,15 +11,26 @@ export interface ReportError {
   originalError?: any;
 }
 
+interface GenerateReportRequest {
+  tokenIdentifier: string;
+}
+
+interface GenerateReportResponse {
+  reportId: string;
+  status: string; // e.g., 'PENDING', 'ERROR'
+  message?: string; // Optional message for errors or status updates
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class ReportService implements OnDestroy {
   private reportStatusSubject: BehaviorSubject<ReportStatus> = new BehaviorSubject<ReportStatus>(ReportStatus.IDLE);
   public reportStatus$: Observable<ReportStatus> = this.reportStatusSubject.asObservable();
+  private pollingSubscription: Subscription | undefined;
+
   private errorSubject: Subject<ReportError> = new Subject<ReportError>();
   public reportError$: Observable<ReportError> = this.errorSubject.asObservable();
-  private pollingSubscription: Subscription | undefined;
 
   constructor(private http: HttpClient) { }
 
@@ -49,26 +60,6 @@ export class ReportService implements OnDestroy {
     }
     return { message: errorMessage, statusCode: error.status, originalError: error };
   }
-
-interface GenerateReportRequest {
-  tokenIdentifier: string;
-}
-
-interface GenerateReportResponse {
-  reportId: string;
-  status: string; // e.g., 'PENDING', 'ERROR'
-  message?: string; // Optional message for errors or status updates
-}
-
-@Injectable({
-  providedIn: 'root'
-})
-export class ReportService implements OnDestroy {
-  private reportStatusSubject: BehaviorSubject<ReportStatus> = new BehaviorSubject<ReportStatus>(ReportStatus.IDLE);
-  public reportStatus$: Observable<ReportStatus> = this.reportStatusSubject.asObservable();
-  private pollingSubscription: Subscription | undefined;
-
-  constructor(private http: HttpClient) { }
 
   generateReport(token: string): Observable<GenerateReportResponse> {
     this.setStatus(ReportStatus.GENERATING);
