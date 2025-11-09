@@ -1,6 +1,6 @@
 export enum ReportStatus {
   IDLE = 'Idle',
   GENERATING = 'Generating',
-  COMPLETED = 'Completed',
-  FAILED = 'Failed'
+  SUCCESS = 'Success',
+  ERROR = 'Error'
 }

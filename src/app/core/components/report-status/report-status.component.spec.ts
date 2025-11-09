@@ -47,7 +47,7 @@ describe('ReportStatusComponent', () => {
   });
 
   it('should display Generated status', () => {
-    reportStatusSubject.next(ReportStatus.COMPLETED);
+    reportStatusSubject.next(ReportStatus.SUCCESS);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.textContent).toContain('Report Status: Completed');
@@ -56,7 +56,7 @@ describe('ReportStatusComponent', () => {
   });
 
   it('should display Error status', () => {
-    reportStatusSubject.next(ReportStatus.FAILED);
+    reportStatusSubject.next(ReportStatus.ERROR);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.textContent).toContain('Report Status: Failed');

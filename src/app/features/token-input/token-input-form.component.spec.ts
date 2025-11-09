@@ -68,7 +68,7 @@ describe('TokenInputFormComponent', () => {
     component.tokenForm.get('token')?.setValue('test-token');
     component.onSubmit();
     tick();
-    reportStatusSubject.next(ReportStatus.COMPLETED);
+    reportStatusSubject.next(ReportStatus.SUCCESS);
     tick();
     expect(component.success).toBeTrue();
     expect(component.loading).toBeFalse();
@@ -79,7 +79,7 @@ describe('TokenInputFormComponent', () => {
     component.tokenForm.get('token')?.setValue('test-token');
     component.onSubmit();
     tick();
-    reportStatusSubject.next(ReportStatus.FAILED);
+    reportStatusSubject.next(ReportStatus.ERROR);
     tick();
     expect(component.error).toBe('Report generation failed');
     expect(component.loading).toBeFalse();
