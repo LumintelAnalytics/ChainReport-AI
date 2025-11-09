@@ -8,9 +8,9 @@ export function getReportStatusLabel(status: ReportStatus): string {
     case ReportStatus.GENERATING:
       return 'Generating';
     case ReportStatus.SUCCESS:
-      return 'Success';
+      return 'Completed';
     case ReportStatus.ERROR:
-      return 'Error';
+      return 'Failed';
     default:
       return 'Unknown';
   }
