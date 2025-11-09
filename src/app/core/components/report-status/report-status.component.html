@@ -7,10 +7,10 @@
     <span *ngSwitchCase="ReportStatus.GENERATING">
       <mat-icon>hourglass_empty</mat-icon> Generating Report...
     </span>
-    <span *ngSwitchCase="ReportStatus.COMPLETED">
+    <span *ngSwitchCase="ReportStatus.SUCCESS">
       <mat-icon>check_circle</mat-icon> Report Generated Successfully!
     </span>
-    <span *ngSwitchCase="ReportStatus.FAILED">
+    <span *ngSwitchCase="ReportStatus.ERROR">
       <mat-icon>error</mat-icon> Error Generating Report.
     </span>
   </ng-container>
