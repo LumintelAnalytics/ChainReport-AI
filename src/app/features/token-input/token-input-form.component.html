@@ -16,4 +16,4 @@
   </mat-card-content>
 </mat-card>
 
-<app-report-status *ngIf="loading || success || error"></app-report-status>
+<app-report-status *ngIf="loading || success || error" (retryReport)="onRetryReport()"></app-report-status>
