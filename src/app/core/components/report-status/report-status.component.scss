@@ -1,37 +1,17 @@
-.report-status {
-  display: inline-flex;
-  align-items: center;
-  padding: 8px 12px;
+.error-message {
+  color: red;
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid red;
   border-radius: 4px;
-  font-weight: bold;
-  color: #fff;
-  flex-wrap: wrap; // Allow items to wrap if space is constrained
-
-  mat-icon {
-    margin-right: 8px;
-  }
-
-  &.Idle {
-    background-color: #ffc107; /* Amber */
-    color: #333;
-  }
-
-  &.Generating {
-    background-color: #2196f3; /* Blue */
-  }
-
-  &.Generated {
-    background-color: #4caf50; /* Green */
-  }
-
-  &.Error {
-    background-color: #f44336; /* Red */
-  }
+  background-color: #ffebee; /* Light red background */
 }
 
-@media (max-width: 768px) {
-  .report-status {
-    padding: 6px 10px; // Slightly reduce padding
-    font-size: 0.9em; // Slightly reduce font size
-  }
+.error-message p {
+  margin: 0 0 5px 0;
+  font-weight: bold;
+}
+
+.error-message button {
+  margin-top: 5px;
 }

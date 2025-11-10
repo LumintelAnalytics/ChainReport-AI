@@ -15,3 +15,8 @@
     </span>
   </ng-container>
 </div>
+
+<div *ngIf="errorMessage" class="error-message">
+  <p>{{ errorMessage }}</p>
+  <button mat-raised-button color="warn" *ngIf="showRetryButton" (click)="onRetry()">Retry</button>
+</div>
