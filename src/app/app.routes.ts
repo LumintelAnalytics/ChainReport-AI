@@ -9,6 +9,7 @@ export const routes: Routes = [
       { path: 'home', component: MainLayoutComponent },
       { path: 'generate-report', component: MainLayoutComponent },
       { path: 'settings', component: MainLayoutComponent },
+      { path: 'report/:reportId', component: MainLayoutComponent },
       { path: '', redirectTo: 'home', pathMatch: 'full' }
     ]
   }
