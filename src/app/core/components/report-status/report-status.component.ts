@@ -4,7 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button'; // Import MatButtonModule
 import { ReportStatus } from '../../models/report-status.enum';
 import { getReportStatusLabel } from '../../models/report-status-label.helper';
-import { ReportService, ReportError } from '../../core/services/report.service'; // Import ReportError
+import { ReportService, ReportError } from '../../services/report.service'; // Import ReportError
 import { Observable, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 
