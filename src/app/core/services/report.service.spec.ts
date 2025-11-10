@@ -156,4 +156,24 @@ describe('ReportService', () => {
     service.ngOnDestroy();
     expect(clearTimeoutSpy).not.toHaveBeenCalled();
   });
+
+  it('should emit reportIdOnSuccess$ when report status becomes SUCCESS', (done) => {
+    const testToken = 'test-token-123';
+    const reportId = 'report-789';
+    const mockGenerateResponse = { reportId: reportId, status: 'PENDING' };
+    const mockPollSuccessResponse = { reportId: reportId, status: 'SUCCESS' };
+
+    service.reportIdOnSuccess$.subscribe(emittedReportId => {
+      expect(emittedReportId).toBe(reportId);
+      done();
+    });
+
+    service.generateReport(testToken).subscribe();
+
+    // Expect initial generate report call
+    httpTestingController.expectOne('/api/v1/report/generate').flush(mockGenerateResponse);
+
+    // Expect polling call and flush with SUCCESS status
+    httpTestingController.expectOne(`/api/v1/report/status/${reportId}`).flush(mockPollSuccessResponse);
+  });
 });
