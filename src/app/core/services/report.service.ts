@@ -34,6 +34,9 @@ export class ReportService implements OnDestroy {
   private errorSubject: Subject<ReportError> = new Subject<ReportError>();
   public reportError$: Observable<ReportError> = this.errorSubject.asObservable();
 
+  private reportIdOnSuccessSubject: Subject<string> = new Subject<string>();
+  public reportIdOnSuccess$: Observable<string> = this.reportIdOnSuccessSubject.asObservable();
+
   constructor(private http: HttpClient) { }
 
   private handleError(error: HttpErrorResponse): ReportError {
@@ -99,6 +102,7 @@ export class ReportService implements OnDestroy {
       tap(response => {
         if (response.status === 'SUCCESS') {
           this.setStatus(ReportStatus.SUCCESS);
+          this.reportIdOnSuccessSubject.next(reportId);
           console.log(`Report ${reportId} completed successfully.`);
         } else if (response.status === 'ERROR') {
           const error: ReportError = {
