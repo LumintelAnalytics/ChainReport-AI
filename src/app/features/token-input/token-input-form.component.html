@@ -12,8 +12,14 @@
         <span *ngIf="!loading">Generate Report</span>
         <mat-spinner *ngIf="loading" [diameter]="24"></mat-spinner>
       </button>
+      <button mat-raised-button color="accent" type="button" (click)="onRetryReport()" *ngIf="reportStatus === ReportStatus.ERROR && !loading">
+        Retry
+      </button>
     </form>
+    <div *ngIf="error" class="error-message">
+      {{ error }}
+    </div>
   </mat-card-content>
 </mat-card>
 
-<app-report-status *ngIf="loading || success || error" (retryReport)="onRetryReport()"></app-report-status>
+<app-report-status *ngIf="loading || success || error" [reportStatus]="reportStatus"></app-report-status>
