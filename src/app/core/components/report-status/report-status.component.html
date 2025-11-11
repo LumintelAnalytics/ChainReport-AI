@@ -16,7 +16,26 @@
   </ng-container>
 </div>
 
-<div *ngIf="errorMessage" class="error-message">
-  <p>{{ errorMessage }}</p>
-  <button mat-raised-button color="warn" *ngIf="showRetryButton" (click)="onRetry()">Retry</button>
+<div class="report-status-container">
+  <div class="status-message">
+    <ng-container [ngSwitch]="reportStatus">
+      <ng-container *ngSwitchCase="ReportStatus.IDLE">
+        <mat-icon>info</mat-icon>
+        <span>Enter a token to generate a report.</span>
+      </ng-container>
+      <ng-container *ngSwitchCase="ReportStatus.GENERATING">
+        <mat-icon>hourglass_empty</mat-icon>
+        <span>Generating report... Please wait.</span>
+      </ng-container>
+      <ng-container *ngSwitchCase="ReportStatus.SUCCESS">
+        <mat-icon class="success-icon">check_circle</mat-icon>
+        <span>Report generated successfully! Redirecting...</span>
+      </ng-container>
+      <ng-container *ngSwitchCase="ReportStatus.ERROR">
+        <mat-icon class="error-icon">error</mat-icon>
+        <span *ngIf="errorMessage">Error: {{ errorMessage }}</span>
+        <span *ngIf="!errorMessage">An unknown error occurred.</span>
+      </ng-container>
+    </ng-container>
+  </div>
 </div>

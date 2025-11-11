@@ -6,7 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { ReportService } from '../../core/services/report.service';
+import { ReportService, ReportError } from '../../core/services/report.service';
 import { ReportStatusComponent } from '../../core/components/report-status/report-status.component';
 import { Subject } from 'rxjs';
 import { takeUntil, finalize, first, switchMap, filter } from 'rxjs/operators';
@@ -24,10 +24,30 @@ export class TokenInputFormComponent implements OnDestroy {
   loading = false;
   error: string | null = null;
   success = false;
+  reportStatus: ReportStatus = ReportStatus.IDLE;
+  reportError: ReportError | null = null;
+  public ReportStatus = ReportStatus; // Make enum available in template
 
   constructor(private fb: FormBuilder, private reportService: ReportService) {
     this.tokenForm = this.fb.group({
       token: ['', Validators.required],
+    });
+
+    this.reportService.reportStatus$.pipe(takeUntil(this.destroy$)).subscribe(status => {
+      this.reportStatus = status;
+      this.loading = status === ReportStatus.GENERATING;
+      this.success = status === ReportStatus.SUCCESS;
+      if (status === ReportStatus.ERROR) {
+        // Error message will be set by reportError$ subscription
+      } else {
+        this.error = null;
+        this.reportError = null;
+      }
+    });
+
+    this.reportService.reportError$.pipe(takeUntil(this.destroy$)).subscribe(err => {
+      this.reportError = err;
+      this.error = err?.message || 'An unexpected error occurred.';
     });
   }
 
@@ -35,15 +55,16 @@ export class TokenInputFormComponent implements OnDestroy {
     return this.tokenForm.get('token');
   }
 
-  onSubmit(): void {
-    if (this.tokenForm.valid) {
+  onSubmit(isRetry: boolean = false): void {
+    if (this.tokenForm.valid || isRetry) { // Allow retry even if form is not valid (e.g., after initial error)
       this.loading = true;
       this.error = null;
       this.success = false;
+      this.reportError = null;
 
       const token = this.tokenForm.get('token')?.value;
 
-      this.reportService.generateReport(token).pipe(
+      this.reportService.generateReport(token, isRetry).pipe(
         switchMap(() =>
           this.reportService.reportStatus$.pipe(
             filter(status => status === ReportStatus.SUCCESS || status === ReportStatus.ERROR),
@@ -52,21 +73,20 @@ export class TokenInputFormComponent implements OnDestroy {
         ),
         takeUntil(this.destroy$),
         finalize(() => {
-          this.loading = false;
+          // loading is now controlled by reportStatus$ subscription
         })
       ).subscribe({
         next: (status) => {
           if (status === ReportStatus.SUCCESS) {
-            this.success = true;
-            this.error = null;
             this.tokenForm.reset();
-          } else if (status === ReportStatus.ERROR) {
-            this.error = 'Report generation failed.';
-            this.success = false;
           }
+          // Error handling is now primarily done via reportError$ subscription
         },
         error: (err) => {
-          this.error = err.message || 'An unexpected error occurred during report generation.';
+          // This error block might catch errors not handled by reportError$ (e.g., network issues before API response)
+          if (!this.reportError) { // Only set if reportError$ hasn't already provided a more specific error
+            this.error = err.message || 'An unexpected error occurred during report generation.';
+          }
           this.success = false;
         }
       });
@@ -79,6 +99,17 @@ export class TokenInputFormComponent implements OnDestroy {
   }
 
   onRetryReport(): void {
-    this.onSubmit();
+    const token = this.tokenForm.get('token')?.value;
+    if (token) {
+      this.onSubmit(true);
+    } else if (this.reportError && this.reportError.originalError && this.reportError.originalError.url) {
+      // If token is not available in form (e.g., after reset on success), but we have a previous error with original request details
+      // This part might need refinement based on how you want to handle retries without a token in the form after a success.
+      // For now, we'll assume the token is still available in the form for retry scenarios.
+      console.warn('Attempted to retry without a token in the form. This scenario might need specific handling.');
+      // Optionally, re-enable the form or prompt the user for input.
+    } else {
+      console.error('Cannot retry: No token available and no previous error with request details.');
+    }
   }
 }

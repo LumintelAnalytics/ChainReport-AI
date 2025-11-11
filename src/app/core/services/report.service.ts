@@ -1,7 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError, interval, Subscription, Subject } from 'rxjs';
-import { catchError, tap, switchMap, takeWhile } from 'rxjs/operators';
+import { catchError, tap, switchMap, takeWhile, retry } from 'rxjs/operators';
 import { ReportStatus } from '../../models/report-status.enum';
 import { HttpErrorResponse } from '@angular/common/http';
 
@@ -67,11 +67,15 @@ export class ReportService implements OnDestroy {
     return { message: errorMessage, statusCode: statusCode, originalError: error };
   }
 
-  generateReport(token: string): Observable<GenerateReportResponse> {
+  generateReport(token: string, isRetry: boolean = false): Observable<GenerateReportResponse> {
+    if (isRetry) {
+      this.resetState();
+    }
     this.setStatus(ReportStatus.GENERATING);
     const requestBody: GenerateReportRequest = { tokenIdentifier: token };
     return this.http.post<GenerateReportResponse>('/api/v1/report/generate', requestBody)
       .pipe(
+        retry(2), // Retry the request up to 2 times
         tap(response => {
           if (response.status === 'PENDING') {
             console.log(`Report generation initiated with ID: ${response.reportId}`);
@@ -139,5 +143,14 @@ export class ReportService implements OnDestroy {
     if (this.pollingSubscription) {
       this.pollingSubscription.unsubscribe();
     }
+  }
+
+  resetState(): void {
+    if (this.pollingSubscription) {
+      this.pollingSubscription.unsubscribe();
+      this.pollingSubscription = undefined;
+    }
+    this.setStatus(ReportStatus.IDLE);
+    this.errorSubject.next(null as any); // Clear any previous errors
   }
 }
