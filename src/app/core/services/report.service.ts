@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable, throwError, interval, Subscription, Subjec
 import { catchError, tap, switchMap, takeWhile, retry } from 'rxjs/operators';
 import { ReportStatus } from '../../models/report-status.enum';
 import { HttpErrorResponse } from '@angular/common/http';
+import { GenerateReportResponse, ReportStatusResponse } from '../../models/report-api.models';
 
 export const REPORT_ERROR_STATUS_SENTINEL = 500;
 
@@ -15,12 +16,6 @@ export interface ReportError {
 
 interface GenerateReportRequest {
   tokenIdentifier: string;
-}
-
-interface GenerateReportResponse {
-  reportId: string;
-  status: string; // e.g., 'PENDING', 'ERROR'
-  message?: string; // Optional message for errors or status updates
 }
 
 @Injectable({
@@ -77,13 +72,13 @@ export class ReportService implements OnDestroy {
       .pipe(
         retry(2), // Retry the request up to 2 times
         tap(response => {
-          if (response.status === 'PENDING') {
+          if (response.reportId) {
             console.log(`Report generation initiated with ID: ${response.reportId}`);
             this.pollingSubscription = this.pollReportStatus(response.reportId).subscribe();
-          } else if (response.status === 'ERROR') {
+          } else {
             const error: ReportError = {
-              message: response.message || 'Unknown error during report generation initiation.',
-              statusCode: REPORT_ERROR_STATUS_SENTINEL // Sentinel for backend-reported errors without a specific HTTP status
+              message: 'Report ID not received during generation initiation.',
+              statusCode: REPORT_ERROR_STATUS_SENTINEL
             };
             console.error(`Error initiating report generation: ${error.message}`);
             this.setStatus(ReportStatus.ERROR);
@@ -100,9 +95,9 @@ export class ReportService implements OnDestroy {
       );
   }
 
-  pollReportStatus(reportId: string): Observable<any> {
+  pollReportStatus(reportId: string): Observable<ReportStatusResponse> {
     return interval(5000).pipe(
-      switchMap(() => this.http.get<GenerateReportResponse>(`/api/v1/report/status/${reportId}`)),
+      switchMap(() => this.http.get<ReportStatusResponse>(`/api/v1/report/status/${reportId}`)),
       tap(response => {
         if (response.status === 'SUCCESS') {
           this.setStatus(ReportStatus.SUCCESS);
@@ -110,7 +105,7 @@ export class ReportService implements OnDestroy {
           console.log(`Report ${reportId} completed successfully.`);
         } else if (response.status === 'ERROR') {
           const error: ReportError = {
-            message: response.message || `Report ${reportId} failed with an unknown error.`,
+            message: response.errorMessage || `Report ${reportId} failed with an unknown error.`,
             statusCode: REPORT_ERROR_STATUS_SENTINEL // Default to 500 for backend-reported errors during polling
           };
           this.setStatus(ReportStatus.ERROR);
