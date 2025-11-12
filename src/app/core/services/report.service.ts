@@ -24,7 +24,8 @@ interface GenerateReportRequest {
 export class ReportService implements OnDestroy {
   private reportStatusSubject: BehaviorSubject<ReportStatus> = new BehaviorSubject<ReportStatus>(ReportStatus.IDLE);
   public reportStatus$: Observable<ReportStatus> = this.reportStatusSubject.asObservable();
-  private pollingSubscription: Subscription | undefined;
+  private activePollingSubscriptions: Map<string, Subscription> = new Map();
+  private stopPollingSubjects: Map<string, Subject<void>> = new Map();
 
   private errorSubject: Subject<ReportError> = new Subject<ReportError>();
   public reportError$: Observable<ReportError> = this.errorSubject.asObservable();
@@ -74,7 +75,7 @@ export class ReportService implements OnDestroy {
         tap(response => {
           if (response.reportId) {
             console.log(`Report generation initiated with ID: ${response.reportId}`);
-            this.pollingSubscription = this.pollReportStatus(response.reportId).subscribe();
+            this.activePollingSubscriptions.set(response.reportId, this.pollReportStatus(response.reportId).subscribe());
           } else {
             const error: ReportError = {
               message: 'Report ID not received during generation initiation.',
@@ -96,13 +97,18 @@ export class ReportService implements OnDestroy {
   }
 
   pollReportStatus(reportId: string): Observable<ReportStatusResponse> {
+    const stopPolling$ = new Subject<void>();
+    this.stopPollingSubjects.set(reportId, stopPolling$);
+
     return interval(5000).pipe(
+      takeUntil(stopPolling$),
       switchMap(() => this.http.get<ReportStatusResponse>(`/api/v1/report/status/${reportId}`)),
       tap(response => {
         if (response.status === 'SUCCESS') {
           this.setStatus(ReportStatus.SUCCESS);
           this.reportIdOnSuccessSubject.next(reportId);
           console.log(`Report ${reportId} completed successfully.`);
+          this.cleanupPolling(reportId);
         } else if (response.status === 'ERROR') {
           const error: ReportError = {
             message: response.errorMessage || `Report ${reportId} failed with an unknown error.`,
@@ -111,6 +117,7 @@ export class ReportService implements OnDestroy {
           this.setStatus(ReportStatus.ERROR);
           console.error(`Report ${reportId} failed: ${error.message}`);
           this.errorSubject.next(error);
+          this.cleanupPolling(reportId);
         } else {
           this.setStatus(ReportStatus.GENERATING); // Still pending or processing
         }
@@ -121,9 +128,29 @@ export class ReportService implements OnDestroy {
         console.error(`HTTP error during polling for report ${reportId}:`, reportError);
         this.setStatus(ReportStatus.ERROR);
         this.errorSubject.next(reportError);
+        this.cleanupPolling(reportId); // Clean up on error as well
         return throwError(() => reportError);
       })
     );
+  }
+
+  private cleanupPolling(reportId: string): void {
+    const stopSubject = this.stopPollingSubjects.get(reportId);
+    if (stopSubject) {
+      stopSubject.next();
+      stopSubject.complete();
+      this.stopPollingSubjects.delete(reportId);
+    }
+    const subscription = this.activePollingSubscriptions.get(reportId);
+    if (subscription) {
+      subscription.unsubscribe();
+      this.activePollingSubscriptions.delete(reportId);
+    }
+  }
+
+  cancelPolling(reportId: string): void {
+    this.cleanupPolling(reportId);
+    console.log(`Polling for report ${reportId} cancelled.`);
   }
 
   setStatus(status: ReportStatus): void {
@@ -134,17 +161,19 @@ export class ReportService implements OnDestroy {
     return this.reportStatus$;
   }
 
+  private cancelAllPolling(): void {
+    this.activePollingSubscriptions.forEach((sub, reportId) => this.cleanupPolling(reportId));
+  }
+
   ngOnDestroy(): void {
-    if (this.pollingSubscription) {
-      this.pollingSubscription.unsubscribe();
-    }
+    this.activePollingSubscriptions.forEach(sub => sub.unsubscribe());
+    this.activePollingSubscriptions.clear();
+    this.stopPollingSubjects.forEach(subject => subject.complete());
+    this.stopPollingSubjects.clear();
   }
 
   resetState(): void {
-    if (this.pollingSubscription) {
-      this.pollingSubscription.unsubscribe();
-      this.pollingSubscription = undefined;
-    }
+    this.cancelAllPolling();
     this.setStatus(ReportStatus.IDLE);
     this.errorSubject.next(null as any); // Clear any previous errors
   }
