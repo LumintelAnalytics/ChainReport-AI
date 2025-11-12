@@ -6,7 +6,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'; /
 import { ReportStatus } from '../../models/report-status.enum';
 import { getReportStatusLabel } from '../../models/report-status-label.helper';
 import { ReportService, ReportError } from '../../services/report.service';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
 
 @Component({
@@ -22,37 +22,36 @@ export class ReportStatusComponent implements OnInit, OnDestroy {
 
   errorMessage: string | null = null;
 
-  private reportStatusSubscription: Subscription | undefined; // Subscription for reportStatus$
-  private reportIdSubscription: Subscription | undefined;
-  private errorSubscription: Subscription | undefined;
+  private destroy$ = new Subject<void>();
 
   constructor(private reportService: ReportService, private router: Router) { }
 
   ngOnInit(): void {
-    this.reportStatusSubscription = this.reportService.reportStatus$.subscribe(status => {
-      this.currentReportStatus = status;
-
+    this.reportService.reportStatus$.pipe(takeUntil(this.destroy$)).subscribe({
+      next: (status) => {
+        this.currentReportStatus = status;
+      },
+      error: (err) => console.error('Error in reportStatus$ subscription:', err)
     });
 
-    this.reportIdSubscription = this.reportService.reportIdOnSuccess$.subscribe(reportId => {
-      this.router.navigate(['/report', reportId]);
+    this.reportService.reportIdOnSuccess$.pipe(takeUntil(this.destroy$)).subscribe({
+      next: (reportId) => {
+        this.router.navigate(['/report', reportId]);
+      },
+      error: (err) => console.error('Error in reportIdOnSuccess$ subscription:', err)
     });
 
-    this.errorSubscription = this.reportService.reportError$.subscribe(error => {
-      this.errorMessage = error.message;
+    this.reportService.reportError$.pipe(takeUntil(this.destroy$)).subscribe({
+      next: (error) => {
+        this.errorMessage = error.message;
+      },
+      error: (err) => console.error('Error in reportError$ subscription:', err)
     });
   }
 
   ngOnDestroy(): void {
-    if (this.reportStatusSubscription) {
-      this.reportStatusSubscription.unsubscribe();
-    }
-    if (this.reportIdSubscription) {
-      this.reportIdSubscription.unsubscribe();
-    }
-    if (this.errorSubscription) {
-      this.errorSubscription.unsubscribe();
-    }
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   getReportStatusLabel(status: ReportStatus): string {
