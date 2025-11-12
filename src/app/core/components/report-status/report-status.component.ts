@@ -19,7 +19,7 @@ import { Router } from '@angular/router';
 export class ReportStatusComponent implements OnInit, OnDestroy {
   public currentReportStatus: ReportStatus = ReportStatus.IDLE;
   public ReportStatus = ReportStatus; // Make enum available in template
-  public isLoading: boolean = false; // New property for spinner visibility
+
   errorMessage: string | null = null;
 
   private reportStatusSubscription: Subscription | undefined; // Subscription for reportStatus$
@@ -31,7 +31,7 @@ export class ReportStatusComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.reportStatusSubscription = this.reportService.reportStatus$.subscribe(status => {
       this.currentReportStatus = status;
-      this.isLoading = status === ReportStatus.GENERATING; // Set isLoading based on status
+
     });
 
     this.reportIdSubscription = this.reportService.reportIdOnSuccess$.subscribe(reportId => {
