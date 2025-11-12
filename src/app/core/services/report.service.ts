@@ -180,11 +180,13 @@ export class ReportService implements OnDestroy {
     this.activePollingSubscriptions.clear();
     this.stopPollingSubjects.forEach(subject => subject.complete());
     this.stopPollingSubjects.clear();
+    this.progressMessageSubject.complete();
   }
 
   resetState(): void {
     this.cancelAllPolling();
     this.setStatus(ReportStatus.IDLE);
     this.errorSubject.next(null as any); // Clear any previous errors
+    this.progressMessageSubject.next('');
   }
 }
