@@ -15,10 +15,8 @@ export class ReportViewComponent implements OnInit {
   constructor(private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {
-      this.reportId = params.get('reportId');
-      // In a real application, you would fetch report data here using reportId
-      console.log('Report ID:', this.reportId);
-    });
+    this.reportId = this.route.snapshot.paramMap.get('reportId');
+    // In a real application, you would fetch report data here using reportId
+    console.log('Report ID:', this.reportId);
   }
 }
