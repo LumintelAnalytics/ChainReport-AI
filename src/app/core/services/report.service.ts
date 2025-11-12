@@ -30,6 +30,9 @@ export class ReportService implements OnDestroy {
   private errorSubject: Subject<ReportError> = new Subject<ReportError>();
   public reportError$: Observable<ReportError> = this.errorSubject.asObservable();
 
+  private progressMessageSubject: Subject<string> = new Subject<string>();
+  public progressMessage$: Observable<string> = this.progressMessageSubject.asObservable();
+
   private reportIdOnSuccessSubject: Subject<string> = new Subject<string>();
   public reportIdOnSuccess$: Observable<string> = this.reportIdOnSuccessSubject.asObservable();
 
@@ -124,6 +127,9 @@ export class ReportService implements OnDestroy {
           this.cleanupPolling(reportId);
         } else {
           this.setStatus(ReportStatus.GENERATING); // Still pending or processing
+          if (response.progressMessage) {
+            this.progressMessageSubject.next(response.progressMessage);
+          }
         }
       }),
       takeWhile(response => response.status !== 'SUCCESS' && response.status !== 'ERROR', true),
@@ -174,11 +180,13 @@ export class ReportService implements OnDestroy {
     this.activePollingSubscriptions.clear();
     this.stopPollingSubjects.forEach(subject => subject.complete());
     this.stopPollingSubjects.clear();
+    this.progressMessageSubject.complete();
   }
 
   resetState(): void {
     this.cancelAllPolling();
     this.setStatus(ReportStatus.IDLE);
     this.errorSubject.next(null as any); // Clear any previous errors
+    this.progressMessageSubject.next('');
   }
 }

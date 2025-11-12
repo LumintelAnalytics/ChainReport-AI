@@ -5,4 +5,5 @@ export interface GenerateReportResponse {
 export interface ReportStatusResponse {
   status: string;
   errorMessage?: string;
+  progressMessage?: string;
 }
