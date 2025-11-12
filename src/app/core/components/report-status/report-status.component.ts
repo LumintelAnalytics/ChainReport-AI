@@ -43,7 +43,7 @@ export class ReportStatusComponent implements OnInit, OnDestroy {
 
     this.reportService.reportError$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (error) => {
-        this.errorMessage = error.message;
+        this.errorMessage = error?.message || 'An unexpected error occurred.';
       },
       error: (err) => console.error('Error in reportError$ subscription:', err)
     });
