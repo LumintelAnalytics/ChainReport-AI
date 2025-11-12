@@ -75,6 +75,10 @@ export class ReportService implements OnDestroy {
         tap(response => {
           if (response.reportId) {
             console.log(`Report generation initiated with ID: ${response.reportId}`);
+            // If a poll for this reportId already exists, clean it up before starting a new one.
+            if (this.activePollingSubscriptions.has(response.reportId)) {
+              this.cleanupPolling(response.reportId);
+            }
             this.activePollingSubscriptions.set(response.reportId, this.pollReportStatus(response.reportId).subscribe());
           } else {
             const error: ReportError = {
