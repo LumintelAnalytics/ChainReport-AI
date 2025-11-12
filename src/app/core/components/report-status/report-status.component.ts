@@ -1,7 +1,8 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'; // Import MatProgressSpinnerModule
 import { ReportStatus } from '../../models/report-status.enum';
 import { getReportStatusLabel } from '../../models/report-status-label.helper';
 import { ReportService, ReportError } from '../../services/report.service';
@@ -11,21 +12,28 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-report-status',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatButtonModule],
+  imports: [CommonModule, MatIconModule, MatButtonModule, MatProgressSpinnerModule], // Add MatProgressSpinnerModule
   templateUrl: './report-status.component.html',
   styleUrls: ['./report-status.component.scss']
 })
 export class ReportStatusComponent implements OnInit, OnDestroy {
-  @Input() reportStatus: ReportStatus = ReportStatus.IDLE;
+  public currentReportStatus: ReportStatus = ReportStatus.IDLE;
   public ReportStatus = ReportStatus; // Make enum available in template
+  public isLoading: boolean = false; // New property for spinner visibility
   errorMessage: string | null = null;
 
+  private reportStatusSubscription: Subscription | undefined; // Subscription for reportStatus$
   private reportIdSubscription: Subscription | undefined;
   private errorSubscription: Subscription | undefined;
 
   constructor(private reportService: ReportService, private router: Router) { }
 
   ngOnInit(): void {
+    this.reportStatusSubscription = this.reportService.reportStatus$.subscribe(status => {
+      this.currentReportStatus = status;
+      this.isLoading = status === ReportStatus.GENERATING; // Set isLoading based on status
+    });
+
     this.reportIdSubscription = this.reportService.reportIdOnSuccess$.subscribe(reportId => {
       this.router.navigate(['/report', reportId]);
     });
@@ -36,6 +44,9 @@ export class ReportStatusComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    if (this.reportStatusSubscription) {
+      this.reportStatusSubscription.unsubscribe();
+    }
     if (this.reportIdSubscription) {
       this.reportIdSubscription.unsubscribe();
     }

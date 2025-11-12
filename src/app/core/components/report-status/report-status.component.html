@@ -1,11 +1,11 @@
-<div class="report-status" *ngIf="(reportStatus$ | async) as status" [ngClass]="status">
-  <p>Report Status: {{ getReportStatusLabel(status) }}</p>
-  <ng-container [ngSwitch]="status">
+<div class="report-status" [ngClass]="currentReportStatus">
+  <p>Report Status: {{ getReportStatusLabel(currentReportStatus) }}</p>
+  <ng-container [ngSwitch]="currentReportStatus">
     <span *ngSwitchCase="ReportStatus.IDLE">
       <mat-icon>watch_later</mat-icon> Idle
     </span>
     <span *ngSwitchCase="ReportStatus.GENERATING">
-      <mat-icon>hourglass_empty</mat-icon> Generating Report...
+      <mat-spinner [diameter]="20"></mat-spinner> Generating Report...
     </span>
     <span *ngSwitchCase="ReportStatus.SUCCESS">
       <mat-icon>check_circle</mat-icon> Report Generated Successfully!
@@ -18,13 +18,13 @@
 
 <div class="report-status-container">
   <div class="status-message">
-    <ng-container [ngSwitch]="reportStatus">
+    <ng-container [ngSwitch]="currentReportStatus">
       <ng-container *ngSwitchCase="ReportStatus.IDLE">
         <mat-icon>info</mat-icon>
         <span>Enter a token to generate a report.</span>
       </ng-container>
       <ng-container *ngSwitchCase="ReportStatus.GENERATING">
-        <mat-icon>hourglass_empty</mat-icon>
+        <mat-spinner [diameter]="20"></mat-spinner>
         <span>Generating report... Please wait.</span>
       </ng-container>
       <ng-container *ngSwitchCase="ReportStatus.SUCCESS">
