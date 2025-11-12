@@ -36,7 +36,9 @@ export class ReportStatusComponent implements OnInit, OnDestroy {
 
     this.reportService.reportIdOnSuccess$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (reportId) => {
-        this.router.navigate(['/report', reportId]);
+        if (reportId) {
+          this.router.navigate(['/report', reportId]);
+        }
       },
       error: (err) => console.error('Error in reportIdOnSuccess$ subscription:', err)
     });
