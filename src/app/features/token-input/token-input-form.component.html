@@ -7,6 +7,9 @@
             <mat-error *ngIf="tokenInput?.hasError('required') && (tokenInput?.touched || tokenInput?.dirty)">
                 Token input is required.
             </mat-error>
+            <mat-error *ngIf="tokenInput?.hasError('invalidFormat') && (tokenInput?.touched || tokenInput?.dirty)">
+                Token must be alphanumeric and at least 3 characters long.
+            </mat-error>
       </mat-form-field>
       <button mat-raised-button color="primary" type="submit" [disabled]="tokenForm.invalid || loading">
         <span *ngIf="!loading">Generate Report</span>

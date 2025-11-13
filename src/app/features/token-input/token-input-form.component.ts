@@ -1,6 +1,6 @@
 import { Component, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators, ValidationErrors } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
@@ -11,6 +11,16 @@ import { ReportStatusComponent } from '../../core/components/report-status/repor
 import { Subject } from 'rxjs';
 import { takeUntil, finalize, first, switchMap, filter } from 'rxjs/operators';
 import { ReportStatus } from '../../models/report-status.enum';
+
+function tokenFormatValidator(control: AbstractControl): ValidationErrors | null {
+  const value = control.value;
+  if (!value) {
+    return null; // 'required' validator will handle empty
+  }
+  // Regex for alphanumeric characters, minimum 3 characters
+  const isValidFormat = /^[a-zA-Z0-9]{3,}$/.test(value);
+  return isValidFormat ? null : { invalidFormat: true };
+}
 
 @Component({
   selector: 'app-token-input-form',
@@ -30,7 +40,7 @@ export class TokenInputFormComponent implements OnDestroy {
 
   constructor(private fb: FormBuilder, private reportService: ReportService) {
     this.tokenForm = this.fb.group({
-      token: ['', Validators.required],
+      token: ['', [Validators.required, tokenFormatValidator]],
     });
 
     this.reportService.reportStatus$.pipe(takeUntil(this.destroy$)).subscribe(status => {
