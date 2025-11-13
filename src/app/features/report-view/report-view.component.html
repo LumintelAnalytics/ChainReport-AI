@@ -1,5 +1,5 @@
-<div *ngIf="isLoading" class="report-loader">
-  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+<div *ngIf="isLoading" class="report-loader" aria-busy="true" role="status" aria-live="polite">
+  <mat-progress-bar mode="indeterminate" aria-label="Loading report"></mat-progress-bar>
   <p>Loading report details...</p>
 </div>
 
