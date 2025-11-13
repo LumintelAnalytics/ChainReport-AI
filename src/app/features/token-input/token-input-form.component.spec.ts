@@ -54,6 +54,35 @@ describe('TokenInputFormComponent', () => {
     expect(compiled.querySelector('mat-error')?.textContent).toContain('Token input is required.');
   });
 
+  it('should display format error when token input is invalid format', () => {
+    const tokenControl = component.tokenForm.get('token');
+    tokenControl?.setValue('ab'); // Too short
+    tokenControl?.markAsTouched();
+    fixture.detectChanges();
+    let compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('mat-error')).toBeTruthy();
+    expect(compiled.querySelector('mat-error')?.textContent).toContain('Token must be alphanumeric and at least 3 characters long.');
+
+    tokenControl?.setValue('a b c'); // Contains space
+    fixture.detectChanges();
+    compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('mat-error')).toBeTruthy();
+    expect(compiled.querySelector('mat-error')?.textContent).toContain('Token must be alphanumeric and at least 3 characters long.');
+  });
+
+  it('should not display format error when token input is valid format', () => {
+    const tokenControl = component.tokenForm.get('token');
+    tokenControl?.setValue('abc');
+    tokenControl?.markAsTouched();
+    fixture.detectChanges();
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('mat-error')).toBeFalsy();
+
+    tokenControl?.setValue('ethereum');
+    fixture.detectChanges();
+    expect(compiled.querySelector('mat-error')).toBeFalsy();
+  });
+
   it('should call startReportGeneration and set loading to true on valid submit', fakeAsync(() => {
     component.tokenForm.get('token')?.setValue('test-token');
     component.onSubmit();
