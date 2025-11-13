@@ -1,0 +1,11 @@
+<div *ngIf="isLoading" class="report-loader">
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  <p>Loading report details...</p>
+</div>
+
+<div *ngIf="!isLoading" class="report-content">
+  <h2>Report Details for ID: {{ reportId }}</h2>
+  <!-- Placeholder for actual report content -->
+  <p>This is where the detailed report content would be displayed.</p>
+  <p>Report data loaded successfully!</p>
+</div>
