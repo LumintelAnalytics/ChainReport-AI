@@ -176,4 +176,43 @@ describe('ReportService', () => {
     // Expect polling call and flush with SUCCESS status
     httpTestingController.expectOne(`/api/v1/report/status/${reportId}`).flush(mockPollSuccessResponse);
   });
+
+  it('should poll for in-progress status updates until a final status is received', (done) => {
+    const testToken = 'test-token-123';
+    const reportId = 'report-polling-123';
+    const mockGenerateResponse = { reportId: reportId, status: 'PENDING' };
+    const mockPollPendingResponse = { reportId: reportId, status: 'PENDING' };
+    const mockPollSuccessResponse = { reportId: reportId, status: 'SUCCESS' };
+
+    let statusUpdates: ReportStatus[] = [];
+    service.getStatus().subscribe(status => {
+      statusUpdates.push(status);
+    });
+
+    service.generateReport(testToken).subscribe();
+
+    // Expect initial generate report call
+    httpTestingController.expectOne('/api/v1/report/generate').flush(mockGenerateResponse);
+
+    // Expect first polling call (PENDING)
+    httpTestingController.expectOne(`/api/v1/report/status/${reportId}`).flush(mockPollPendingResponse);
+
+    // Expect second polling call (PENDING)
+    httpTestingController.expectOne(`/api/v1/report/status/${reportId}`).flush(mockPollPendingResponse);
+
+    // Expect final polling call (SUCCESS)
+    httpTestingController.expectOne(`/api/v1/report/status/${reportId}`).flush(mockPollSuccessResponse);
+
+    // After all flushes, check the status updates
+    setTimeout(() => {
+      expect(statusUpdates).toEqual([
+        ReportStatus.IDLE, // Initial status
+        ReportStatus.GENERATING, // After generateReport call
+        ReportStatus.GENERATING, // After first poll (still pending)
+        ReportStatus.GENERATING, // After second poll (still pending)
+        ReportStatus.SUCCESS // After final poll
+      ]);
+      done();
+    }, 0); // Use setTimeout to allow all async operations to complete
+  });
 });
