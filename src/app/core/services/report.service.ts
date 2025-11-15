@@ -43,7 +43,7 @@ export class ReportService implements OnDestroy {
    * This centralizes error processing, providing user-friendly messages based on HTTP status codes.
    * @param error The HttpErrorResponse object received from an HttpClient call.
    * @returns A ReportError object containing a user-friendly message, status code, and the original error.
-   * @throws This method does not throw directly but returns an error object.
+   * Note: This method does not throw directly but returns an error object.
    */
   private handleError(error: HttpErrorResponse): ReportError {
     let errorMessage: string;
