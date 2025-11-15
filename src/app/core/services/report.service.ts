@@ -1,7 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError, interval, Subscription, Subject } from 'rxjs';
-import { catchError, tap, switchMap, takeWhile, retry } from 'rxjs/operators';
+import { catchError, tap, switchMap, takeWhile, retry, takeUntil } from 'rxjs/operators';
 import { ReportStatus } from '../../models/report-status.enum';
 import { HttpErrorResponse } from '@angular/common/http';
 import { GenerateReportResponse, ReportStatusResponse } from '../../models/report-api.models';
@@ -27,8 +27,8 @@ export class ReportService implements OnDestroy {
   private activePollingSubscriptions: Map<string, Subscription> = new Map();
   private stopPollingSubjects: Map<string, Subject<void>> = new Map();
 
-  private errorSubject: Subject<ReportError> = new Subject<ReportError>();
-  public reportError$: Observable<ReportError> = this.errorSubject.asObservable();
+  private errorSubject: Subject<ReportError | null> = new Subject<ReportError | null>();
+  public reportError$: Observable<ReportError | null> = this.errorSubject.asObservable();
 
   private progressMessageSubject: Subject<string> = new Subject<string>();
   public progressMessage$: Observable<string> = this.progressMessageSubject.asObservable();
@@ -69,7 +69,7 @@ export class ReportService implements OnDestroy {
           errorMessage = `An unexpected error occurred. Status: ${error.status}`;
       }
     }
-    const statusCode = (error.error instanceof ErrorEvent || error.status === 0 || error.status === REPORT_ERROR_STATUS_SENTINEL) ? undefined : error.status;
+    const statusCode = (error.error instanceof ErrorEvent || error.status === 0) ? undefined : error.status;
     return { message: errorMessage, statusCode: statusCode, originalError: error };
   }
 
