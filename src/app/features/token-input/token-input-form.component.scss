@@ -10,6 +10,8 @@ mat-form-field {
 
 button {
   position: relative;
+  /* Angular Material handles default styling for active and disabled states of mat-button. */
+  /* No custom styles needed for color changes on active/disabled states. */
   .mat-spinner {
     position: absolute;
     top: 50%;
