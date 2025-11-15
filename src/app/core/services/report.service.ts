@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, throwError, interval, Subscription, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, throwError, interval, Subscription, Subject, timer } from 'rxjs';
 import { catchError, tap, switchMap, takeWhile, retry, takeUntil } from 'rxjs/operators';
 import { ReportStatus } from '../../models/report-status.enum';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -131,7 +131,7 @@ export class ReportService implements OnDestroy {
     const stopPolling$ = new Subject<void>();
     this.stopPollingSubjects.set(reportId, stopPolling$);
 
-    return interval(5000).pipe(
+    return timer(0, 5000).pipe(
       takeUntil(stopPolling$),
       switchMap(() => this.http.get<ReportStatusResponse>(`/api/v1/report/status/${reportId}`)),
       tap(response => {
@@ -233,6 +233,9 @@ export class ReportService implements OnDestroy {
     this.stopPollingSubjects.forEach(subject => subject.complete());
     this.stopPollingSubjects.clear();
     this.progressMessageSubject.complete();
+    this.errorSubject.complete();
+    this.reportStatusSubject.complete();
+    this.reportIdOnSuccessSubject.complete();
   }
 
   /**
@@ -242,7 +245,7 @@ export class ReportService implements OnDestroy {
   resetState(): void {
     this.cancelAllPolling();
     this.setStatus(ReportStatus.IDLE);
-    this.errorSubject.next(null as any); // Clear any previous errors
+    this.errorSubject.next(null); // Clear any previous errors
     this.progressMessageSubject.next('');
   }
 }
