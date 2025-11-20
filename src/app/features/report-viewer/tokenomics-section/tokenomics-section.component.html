@@ -6,9 +6,9 @@
       <mat-card-title>Supply Metrics</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <p><strong>Total Supply:</strong> {{ tokenomicsReport.supplyMetrics.totalSupply }}</p>
-      <p><strong>Circulating Supply:</strong> {{ tokenomicsReport.supplyMetrics.circulatingSupply }}</p>
-      <p><strong>Max Supply:</strong> {{ tokenomicsReport.supplyMetrics.maxSupply }}</p>
+      <p><strong>Total Supply:</strong> {{ tokenomicsReport.supplyInfo.totalSupply }}</p>
+      <p><strong>Circulating Supply:</strong> {{ tokenomicsReport.supplyInfo.circulatingSupply }}</p>
+      <p><strong>Max Supply:</strong> {{ tokenomicsReport.supplyInfo.maxSupply }}</p>
       <div class="chart-placeholder">Supply Distribution Chart</div>
     </mat-card-content>
   </mat-card>
@@ -18,9 +18,9 @@
       <mat-card-title>Distribution Metrics</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <p><strong>Holder Count:</strong> {{ tokenomicsReport.distributionMetrics.holderCount }}</p>
-      <p><strong>Top 10 Holders:</strong> {{ tokenomicsReport.distributionMetrics.top10HoldersPercentage }}%</p>
-      <p><strong>Top 100 Holders:</strong> {{ tokenomicsReport.distributionMetrics.top100HoldersPercentage }}%</p>
+      <p><strong>Holder Count:</strong> {{ tokenomicsReport.distributionInfo.holderCount }}</p>
+      <p><strong>Top 10 Holders:</strong> {{ tokenomicsReport.distributionInfo.top10HoldersPercentage }}%</p>
+      <p><strong>Top 100 Holders:</strong> {{ tokenomicsReport.distributionInfo.top100HoldersPercentage }}%</p>
       <div class="chart-placeholder">Holder Distribution Chart</div>
     </mat-card-content>
   </mat-card>

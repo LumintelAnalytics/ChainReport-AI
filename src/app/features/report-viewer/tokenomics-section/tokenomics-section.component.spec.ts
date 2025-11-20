@@ -14,6 +14,20 @@ describe('TokenomicsSectionComponent', () => {
 
     fixture = TestBed.createComponent(TokenomicsSectionComponent);
     component = fixture.componentInstance;
+    component.tokenomicsReport = {
+      supplyInfo: {
+        circulatingSupply: '1000000',
+        totalSupply: '1000000',
+      },
+      distributionInfo: {
+        holdersCount: 1000,
+        topHoldersPercentage: 0.5,
+      },
+      riskFlags: {
+        isCentralized: false,
+        hasMintFunction: false,
+      },
+    };
     fixture.detectChanges();
   });
 
