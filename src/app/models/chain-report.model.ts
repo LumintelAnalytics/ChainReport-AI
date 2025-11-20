@@ -14,11 +14,16 @@ export interface HolderActivity {
   concentrationByBalance: { [key: string]: number }; // e.g., { "<1k": 0.2, "1k-10k": 0.3 }
 }
 
+export interface WhaleHolder {
+  address: string;
+  balance: string;
+}
+
 export interface WhaleMovements {
   // Example fields, adjust as per actual data structure
   whaleTransactionsCount: number;
-  whaleTransactionVolume: number;
-  topHolders: { address: string; balance: number }[];
+  whaleTransactionVolume: string;
+  topHolders: WhaleHolder[];
 }
 
 export interface ChainReport {
