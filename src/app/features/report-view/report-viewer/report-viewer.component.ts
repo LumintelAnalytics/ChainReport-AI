@@ -1,7 +1,7 @@
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { ReportService } from '../../../core/services/report.service';
 import { FinalReportData } from '../../../models/report-api.models';
-import { Subscription } from 'rxjs';
+import { Subscription, switchMap, tap, of } from 'rxjs';
 
 @Component({
   selector: 'app-report-viewer',
@@ -16,38 +16,38 @@ export class ReportViewerComponent implements OnInit {
   reportData: FinalReportData | null = null;
   isLoading: boolean = true;
   error: string | null = null;
-  private reportSubscription: Subscription | undefined;
 
   constructor(private route: ActivatedRoute, private reportService: ReportService) {}
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {
-      this.reportId = params.get('reportId');
-      if (this.reportId) {
-        this.fetchReportData(this.reportId);
-      }
-    });
-  }
-
-  ngOnDestroy(): void {
-    if (this.reportSubscription) {
-      this.reportSubscription.unsubscribe();
-    }
-  }
-
-  private fetchReportData(reportId: string): void {
-    this.isLoading = true;
-    this.error = null;
-    this.reportSubscription = this.reportService.getFinalReport(reportId).subscribe({
-      next: (data: FinalReportData) => {
-        this.reportData = data;
-        this.isLoading = false;
-      },
-      error: (err) => {
-        this.error = err.message || 'Failed to load report.';
-        this.isLoading = false;
-      }
-    });
+    this.route.paramMap
+      .pipe(
+        tap(() => {
+          this.isLoading = true;
+          this.error = null;
+          this.reportData = null; // Clear previous report data
+        }),
+        switchMap(params => {
+          this.reportId = params.get('reportId');
+          if (!this.reportId) {
+            this.isLoading = false;
+            return of(null); // Return an observable of null if no reportId
+          }
+          return this.reportService.getFinalReport(this.reportId).pipe(
+            tap({
+              next: (data: FinalReportData) => {
+                this.reportData = data;
+                this.isLoading = false;
+              },
+              error: (err) => {
+                this.error = err.message || 'Failed to load report.';
+                this.isLoading = false;
+              }
+            })
+          );
+        })
+      )
+      .subscribe();
   }
 
   toggleLayout(): void {
