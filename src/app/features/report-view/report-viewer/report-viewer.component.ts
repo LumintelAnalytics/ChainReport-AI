@@ -6,7 +6,7 @@ import { Subscription, switchMap, tap, of } from 'rxjs';
 @Component({
   selector: 'app-report-viewer',
   standalone: true,
-  imports: [CommonModule, MatTabsModule, MatButtonModule, MatIconModule, MatListModule, RouterModule],
+  imports: [CommonModule, MatTabsModule, MatButtonModule, MatIconModule, MatListModule, RouterModule, TokenomicsSectionComponent],
   templateUrl: './report-viewer.component.html',
   styleUrl: './report-viewer.component.scss',
 })

@@ -29,8 +29,7 @@
       <mat-tab-group dynamicHeight>
         <mat-tab label="Tokenomics">
           <div class="tab-content">
-            <h3>Tokenomics Data</h3>
-            <pre>{{ reportData.tokenomics | json }}</pre>
+            <app-tokenomics-section [tokenomicsReport]="reportData.tokenomics"></app-tokenomics-section>
           </div>
         </mat-tab>
         <mat-tab label="Sentiment">
