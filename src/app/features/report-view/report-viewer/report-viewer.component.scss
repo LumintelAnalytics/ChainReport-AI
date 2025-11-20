@@ -1,0 +1,17 @@
+.report-viewer-container {
+  padding: 20px;
+
+  h2 {
+    color: var(--text-color-primary);
+    margin-bottom: 20px;
+  }
+
+  .mat-tab-group {
+    margin-top: 20px;
+  }
+
+  .tab-content {
+    padding: 20px 0;
+    color: var(--text-color-secondary);
+  }
+}
