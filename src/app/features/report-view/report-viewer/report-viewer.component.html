@@ -1,5 +1,5 @@
 <div class="report-viewer-container">
-  <h2>Report Viewer for ID: {{ reportId }}</h2>
+  <h2>Report Viewer{{ reportId ? ' for ID: ' + reportId : '' }}</h2>
 
   <mat-tab-group dynamicHeight>
     <mat-tab label="Tokenomics">

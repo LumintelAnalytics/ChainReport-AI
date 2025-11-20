@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTabsModule } from '@angular/material/tabs';
 import { ActivatedRoute } from '@angular/router';
@@ -10,12 +10,14 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './report-viewer.component.html',
   styleUrl: './report-viewer.component.scss',
 })
-export class ReportViewerComponent {
+export class ReportViewerComponent implements OnInit {
   reportId: string | null = null;
 
   constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.reportId = this.route.snapshot.paramMap.get('reportId');
+    this.route.paramMap.subscribe(params => {
+      this.reportId = params.get('reportId');
+    });
   }
 }
