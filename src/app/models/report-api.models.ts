@@ -10,7 +10,7 @@ export interface ReportStatusResponse {
 
 export interface FinalReportData {
   reportId: string;
-  tokenomics: any; // Placeholder
+  tokenomics: TokenomicsReport; // Placeholder
   sentiment: any; // Placeholder
   team: any;      // Placeholder
   chainData: any; // Placeholder
