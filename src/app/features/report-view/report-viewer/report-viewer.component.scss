@@ -6,6 +6,12 @@
     margin-bottom: 20px;
   }
 
+  .layout-toggle {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+  }
+
   .mat-tab-group {
     margin-top: 20px;
   }
@@ -13,5 +19,33 @@
   .tab-content {
     padding: 20px 0;
     color: var(--text-color-secondary);
+  }
+
+  .sidebar-layout {
+    display: flex;
+    margin-top: 20px;
+
+    .sidebar-nav {
+      width: 200px;
+      margin-right: 20px;
+      box-shadow: var(--shadow-elevation-2);
+      border-radius: var(--border-radius);
+
+      .mat-list-item {
+        color: var(--text-color-primary);
+        &.active {
+          background-color: var(--primary-color-light);
+          color: var(--primary-color-dark);
+        }
+      }
+    }
+
+    .sidebar-content {
+      flex-grow: 1;
+      padding: 20px;
+      box-shadow: var(--shadow-elevation-2);
+      border-radius: var(--border-radius);
+      color: var(--text-color-secondary);
+    }
   }
 }
