@@ -1,3 +1,5 @@
+import { TokenomicsReport } from './tokenomics.model';
+
 export interface GenerateReportResponse {
   reportId: string;
 }
