@@ -44,10 +44,9 @@
         <a mat-list-item routerLink="./team" routerLinkActive="active">Team</a>
         <a mat-list-item routerLink="./chain-data" routerLinkActive="active">Chain Data</a>
       </mat-nav-list>
-      <div class="sidebar-content">
-        <!-- Content for sidebar view will be rendered here based on routing -->
-        <p>Select a section from the sidebar.</p>
-      </div>
+          <div class="sidebar-content">
+            <router-outlet></router-outlet>
+          </div>
     </div>
   </ng-template>
 </div>
