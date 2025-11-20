@@ -5,6 +5,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { catchError, finalize, of, switchMap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ReportService } from '../../core/services/report.service';
+import { FinalReportData } from '../../models/report-api.models';
 
 @Component({
   selector: 'app-report-view',
@@ -16,7 +17,7 @@ import { ReportService } from '../../core/services/report.service';
 export class ReportViewComponent implements OnInit {
   reportId: string | null = null;
   isLoading = false;
-  reportData: any = null;
+  reportData: FinalReportData | null = null;
   error: string | null = null;
 
   constructor(private route: ActivatedRoute, private destroyRef: DestroyRef, private reportService: ReportService) { }
@@ -31,7 +32,8 @@ export class ReportViewComponent implements OnInit {
           this.error = null;
           return this.reportService.getFinalReport(this.reportId).pipe(
             catchError(err => {
-              this.error = err?.message || 'Failed to load report.';
+              console.error('Error loading report:', err);
+              this.error = 'Failed to load report.';
               this.reportData = null;
               return of(null);
             }),
@@ -39,8 +41,11 @@ export class ReportViewComponent implements OnInit {
               this.isLoading = false;
             })
           );
+        } else {
+          this.reportData = null;
+          this.error = 'Report ID is missing.';
+          return of(null);
         }
-        return of(null);
       })
     ).subscribe(report => {
       if (report) {
