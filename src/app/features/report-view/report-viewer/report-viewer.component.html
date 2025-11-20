@@ -7,46 +7,65 @@
     </button>
   </div>
 
-  <div *ngIf="layoutView === 'tabs'; else sidebarLayout">
-    <mat-tab-group dynamicHeight>
-      <mat-tab label="Tokenomics">
-        <div class="tab-content">
-          <h3>Tokenomics Data</h3>
-          <p>Content for Tokenomics will go here.</p>
-        </div>
-      </mat-tab>
-      <mat-tab label="Sentiment">
-        <div class="tab-content">
-          <h3>Sentiment Analysis</h3>
-          <p>Content for Sentiment will go here.</p>
-        </div>
-      </mat-tab>
-      <mat-tab label="Team">
-        <div class="tab-content">
-          <h3>Team Information</h3>
-          <p>Content for Team will go here.</p>
-        </div>
-      </mat-tab>
-      <mat-tab label="Chain Data">
-        <div class="tab-content">
-          <h3>Blockchain Data</h3>
-          <p>Content for Chain Data will go here.</p>
-        </div>
-      </mat-tab>
-    </mat-tab-group>
+  <div *ngIf="isLoading" class="skeleton-loader">
+    <div class="skeleton-header"></div>
+    <div class="skeleton-tabs">
+      <div class="skeleton-tab"></div>
+      <div class="skeleton-tab"></div>
+      <div class="skeleton-tab"></div>
+      <div class="skeleton-tab"></div>
+    </div>
+    <div class="skeleton-content"></div>
+    <div class="skeleton-content short"></div>
   </div>
 
-  <ng-template #sidebarLayout>
-    <div class="sidebar-layout">
-      <mat-nav-list class="sidebar-nav">
-        <a mat-list-item routerLink="./tokenomics" routerLinkActive="active">Tokenomics</a>
-        <a mat-list-item routerLink="./sentiment" routerLinkActive="active">Sentiment</a>
-        <a mat-list-item routerLink="./team" routerLinkActive="active">Team</a>
-        <a mat-list-item routerLink="./chain-data" routerLinkActive="active">Chain Data</a>
-      </mat-nav-list>
-          <div class="sidebar-content">
-            <router-outlet></router-outlet>
+  <div *ngIf="error" class="error-message">
+    <mat-icon color="warn">error_outline</mat-icon>
+    <span>{{ error }}</span>
+  </div>
+
+  <div *ngIf="!isLoading && !error && reportData">
+    <div *ngIf="layoutView === 'tabs'; else sidebarLayout">
+      <mat-tab-group dynamicHeight>
+        <mat-tab label="Tokenomics">
+          <div class="tab-content">
+            <h3>Tokenomics Data</h3>
+            <pre>{{ reportData.tokenomics | json }}</pre>
           </div>
+        </mat-tab>
+        <mat-tab label="Sentiment">
+          <div class="tab-content">
+            <h3>Sentiment Analysis</h3>
+            <pre>{{ reportData.sentiment | json }}</pre>
+          </div>
+        </mat-tab>
+        <mat-tab label="Team">
+          <div class="tab-content">
+            <h3>Team Information</h3>
+            <pre>{{ reportData.team | json }}</pre>
+          </div>
+        </mat-tab>
+        <mat-tab label="Chain Data">
+          <div class="tab-content">
+            <h3>Blockchain Data</h3>
+            <pre>{{ reportData.chainData | json }}</pre>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
     </div>
-  </ng-template>
+
+    <ng-template #sidebarLayout>
+      <div class="sidebar-layout">
+        <mat-nav-list class="sidebar-nav">
+          <a mat-list-item routerLink="./tokenomics" routerLinkActive="active">Tokenomics</a>
+          <a mat-list-item routerLink="./sentiment" routerLinkActive="active">Sentiment</a>
+          <a mat-list-item routerLink="./team" routerLinkActive="active">Team</a>
+          <a mat-list-item routerLink="./chain-data" routerLinkActive="active">Chain Data</a>
+        </mat-nav-list>
+        <div class="sidebar-content">
+          <router-outlet></router-outlet>
+        </div>
+      </div>
+    </ng-template>
+  </div>
 </div>
