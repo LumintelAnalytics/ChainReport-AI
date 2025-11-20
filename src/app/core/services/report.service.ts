@@ -4,7 +4,8 @@ import { BehaviorSubject, Observable, throwError, interval, Subscription, Subjec
 import { catchError, tap, switchMap, takeWhile, retry, takeUntil } from 'rxjs/operators';
 import { ReportStatus } from '../../models/report-status.enum';
 import { HttpErrorResponse } from '@angular/common/http';
-import { GenerateReportResponse, ReportStatusResponse } from '../../models/report-api.models';
+import { GenerateReportResponse, ReportStatusResponse, FinalReportData } from '../../models/report-api.models';
+import { of } from 'rxjs';
 
 export const REPORT_ERROR_STATUS_SENTINEL = 500;
 
@@ -247,5 +248,23 @@ export class ReportService implements OnDestroy {
     this.setStatus(ReportStatus.IDLE);
     this.errorSubject.next(null); // Clear any previous errors
     this.progressMessageSubject.next('');
+  }
+
+  /**
+   * Fetches the final report data for a given report ID.
+   * @param reportId The unique identifier of the report.
+   * @returns An Observable that emits the FinalReportData.
+   * @throws Emits a ReportError through `reportError$` observable if an HTTP error occurs.
+   */
+  getFinalReport(reportId: string): Observable<FinalReportData> {
+    return this.http.get<FinalReportData>(`/api/v1/report/${reportId}`)
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          const reportError = this.handleError(error);
+          console.error(`HTTP error fetching final report ${reportId}:`, reportError);
+          this.errorSubject.next(reportError);
+          return throwError(() => reportError);
+        })
+      );
   }
 }
