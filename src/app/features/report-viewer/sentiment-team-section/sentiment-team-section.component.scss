@@ -1,32 +1,63 @@
 .sentiment-team-section-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
   padding: 20px;
 }
 
-.sentiment-card,
-.team-card {
-  flex: 1 1 calc(50% - 20px);
-  min-width: 300px;
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  justify-content: center;
+}
+
+.grid-item {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-mat-card-title {
-  font-size: 1.5em;
+.gauge-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.gauge-circle {
+  width: 8rem;
+  height: 8rem;
+  max-width: 150px;
+  max-height: 150px;
+  border-radius: 50%;
+  border: 10px solid #388E3C; /* Darker green for better contrast */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem; /* Relative unit for responsive sizing */
+  font-weight: bold;
+  color: #283593; /* Darker blue for better contrast */
   margin-bottom: 10px;
 }
 
-mat-card-content h3 {
+.text-box h3 {
   color: #3f51b5;
-  margin-top: 15px;
+  margin-bottom: 10px;
 }
 
-mat-card-content ul {
+.community-metrics ul,
+.risk-indicators ul {
   list-style-type: none;
   padding: 0;
 }
 
-mat-card-content li {
+.community-metrics li,
+.risk-indicators li {
   margin-bottom: 5px;
+}
+
+/* Responsive breakpoints */
+@media (max-width: 768px) {
+  .grid-container {
+    grid-template-columns: 1fr;
+  }
 }

@@ -1,31 +1,36 @@
 <div class="sentiment-team-section-container">
-  <mat-card *ngIf="sentimentReport" class="sentiment-card">
-    <mat-card-header>
-      <mat-card-title>Sentiment Analysis</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <h3>Sentiment Score: {{ sentimentReport.sentimentScore }}</h3>
-      <p><strong>Summary:</strong> {{ sentimentReport.sentimentSummary }}</p>
+  <div class="grid-container">
+    <div class="grid-item gauge-placeholder">
+      <div class="gauge-circle" role="img" aria-label="Sentiment score gauge" tabindex="0">
+        <span class="gauge-value">{{ sentimentReport?.sentimentScore ?? 'N/A' }}</span>
+      </div>
+      <h3>Sentiment Score</h3>
+    </div>
+
+    <div class="grid-item text-box">
+      <h3>Sentiment Summary</h3>
+      <p aria-live="polite">{{ sentimentReport?.sentimentSummary ?? 'No sentiment data available.' }}</p>
+    </div>
+
+    <div class="grid-item text-box">
+      <h3>Team Analysis</h3>
+      <p aria-live="polite">{{ teamReport?.teamDescription ?? 'No team analysis available.' }}</p>
+    </div>
+
+    <div class="grid-item community-metrics" *ngIf="sentimentReport?.communityMetrics">
       <h4>Community Metrics:</h4>
       <ul>
-        <li>Mentions: {{ sentimentReport.communityMetrics?.mentions }}</li>
-        <li>Positive Mentions: {{ sentimentReport.communityMetrics?.positiveMentions }}</li>
-        <li>Negative Mentions: {{ sentimentReport.communityMetrics?.negativeMentions }}</li>
+        <li>Mentions: {{ sentimentReport?.communityMetrics?.mentions ?? 0 }}</li>
+        <li>Positive Mentions: {{ sentimentReport?.communityMetrics?.positiveMentions ?? 0 }}</li>
+        <li>Negative Mentions: {{ sentimentReport?.communityMetrics?.negativeMentions ?? 0 }}</li>
       </ul>
-    </mat-card-content>
-  </mat-card>
+    </div>
 
-  <mat-card *ngIf="teamReport" class="team-card">
-    <mat-card-header>
-      <mat-card-title>Team Overview</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <h3>Team Name: {{ teamReport.teamName }}</h3>
-      <p><strong>Description:</strong> {{ teamReport.teamDescription }}</p>
+    <div class="grid-item risk-indicators" *ngIf="teamReport?.riskIndicators?.length">
       <h4>Risk Indicators:</h4>
       <ul>
-        <li *ngFor="let indicator of teamReport.riskIndicators">{{ indicator }}</li>
+        <li *ngFor="let indicator of teamReport?.riskIndicators">{{ indicator }}</li>
       </ul>
-    </mat-card-content>
-  </mat-card>
+    </div>
+  </div>
 </div>
