@@ -1,41 +1,68 @@
 <div class="tokenomics-section">
   <h2>Tokenomics Report</h2>
 
-  <mat-card class="metrics-card">
-    <mat-card-header>
-      <mat-card-title>Supply Metrics</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <p><strong>Total Supply:</strong> {{ tokenomicsReport.supplyInfo.totalSupply }}</p>
-      <p><strong>Circulating Supply:</strong> {{ tokenomicsReport.supplyInfo.circulatingSupply }}</p>
-      <p><strong>Max Supply:</strong> {{ tokenomicsReport.supplyInfo.maxSupply }}</p>
-      <div class="chart-placeholder">Supply Distribution Chart</div>
-    </mat-card-content>
-  </mat-card>
+  <div class="tokenomics-content">
+    <mat-card class="metrics-card">
+      <mat-card-header>
+        <mat-card-title>Supply Metrics</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p><strong>Total Supply:</strong> {{ tokenomicsReport.supplyInfo.totalSupply }}</p>
+        <p><strong>Circulating Supply:</strong> {{ tokenomicsReport.supplyInfo.circulatingSupply }}</p>
+        <p><strong>Max Supply:</strong> {{ tokenomicsReport.supplyInfo.maxSupply }}</p>
+      </mat-card-content>
+    </mat-card>
 
-  <mat-card class="metrics-card">
-    <mat-card-header>
-      <mat-card-title>Distribution Metrics</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <p><strong>Holder Count:</strong> {{ tokenomicsReport.distributionInfo.holderCount }}</p>
-      <p><strong>Top 10 Holders:</strong> {{ tokenomicsReport.distributionInfo.top10HoldersPercentage }}%</p>
-      <p><strong>Top 100 Holders:</strong> {{ tokenomicsReport.distributionInfo.top100HoldersPercentage }}%</p>
-      <div class="chart-placeholder">Holder Distribution Chart</div>
-    </mat-card-content>
-  </mat-card>
+    <mat-card class="chart-card">
+      <mat-card-header>
+        <mat-card-title>Supply Chart</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="chart-placeholder">Supply Chart Placeholder</div>
+      </mat-card-content>
+    </mat-card>
 
-  <mat-card class="metrics-card">
-    <mat-card-header>
-      <mat-card-title>Risk Flags</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <p *ngIf="tokenomicsReport.riskFlags.isRenounced"><strong>Is Renounced:</strong> Yes</p>
-      <p *ngIf="!tokenomicsReport.riskFlags.isRenounced"><strong>Is Renounced:</strong> No</p>
-      <p *ngIf="tokenomicsReport.riskFlags.hasMintFunction"><strong>Has Mint Function:</strong> Yes</p>
-      <p *ngIf="!tokenomicsReport.riskFlags.hasMintFunction"><strong>Has Mint Function:</strong> No</p>
-      <p *ngIf="tokenomicsReport.riskFlags.isProxy"><strong>Is Proxy:</strong> Yes</p>
-      <p *ngIf="!tokenomicsReport.riskFlags.isProxy"><strong>Is Proxy:</strong> No</p>
-    </mat-card-content>
-  </mat-card>
+    <mat-card class="metrics-card">
+      <mat-card-header>
+        <mat-card-title>Distribution Metrics</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p><strong>Holder Count:</strong> {{ tokenomicsReport.distributionInfo.holderCount }}</p>
+        <p><strong>Top 10 Holders:</strong> {{ tokenomicsReport.distributionInfo.top10HoldersPercentage }}%</p>
+        <p><strong>Top 100 Holders:</strong> {{ tokenomicsReport.distributionInfo.top100HoldersPercentage }}%</p>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="chart-card">
+      <mat-card-header>
+        <mat-card-title>Distribution Chart</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="chart-placeholder">Distribution Chart Placeholder</div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="metrics-card">
+      <mat-card-header>
+        <mat-card-title>Risk Flags</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p *ngIf="tokenomicsReport.riskFlags.isRenounced"><strong>Is Renounced:</strong> Yes</p>
+        <p *ngIf="!tokenomicsReport.riskFlags.isRenounced"><strong>Is Renounced:</strong> No</p>
+        <p *ngIf="tokenomicsReport.riskFlags.hasMintFunction"><strong>Has Mint Function:</strong> Yes</p>
+        <p *ngIf="!tokenomicsReport.riskFlags.hasMintFunction"><strong>Has Mint Function:</strong> No</p>
+        <p *ngIf="tokenomicsReport.riskFlags.isProxy"><strong>Is Proxy:</strong> Yes</p>
+        <p *ngIf="!tokenomicsReport.riskFlags.isProxy"><strong>Is Proxy:</strong> No</p>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="chart-card">
+      <mat-card-header>
+        <mat-card-title>Risk Flags Details</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="chart-placeholder">Risk Flags Details Placeholder</div>
+      </mat-card-content>
+    </mat-card>
+  </div>
 </div>

@@ -6,25 +6,56 @@
     margin-bottom: 20px;
   }
 
-  .metrics-card {
-    margin-bottom: 20px;
+  .tokenomics-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+  }
+
+  .metrics-card,
+  .chart-card {
+    margin-bottom: 0;
     background-color: var(--card-background);
     color: var(--text-color-secondary);
+    display: flex;
+    flex-direction: column;
+
+    mat-card-header {
+      padding-bottom: 0;
+    }
 
     mat-card-title {
       color: var(--text-color-primary);
     }
 
-    .chart-placeholder {
-      background-color: var(--chart-placeholder-background);
-      color: var(--chart-placeholder-text);
-      height: 150px;
+    mat-card-content {
+      flex-grow: 1;
       display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 8px;
-      margin-top: 15px;
-      font-style: italic;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+  }
+
+  .chart-card .mat-card-content {
+    justify-content: center;
+  }
+
+  .chart-placeholder {
+    background-color: var(--chart-placeholder-background);
+    color: var(--chart-placeholder-text);
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    margin-top: 15px;
+    font-style: italic;
+    width: 100%;
+  }
+
+  @media (max-width: 768px) {
+    .tokenomics-content {
+      grid-template-columns: 1fr;
     }
   }
 }
