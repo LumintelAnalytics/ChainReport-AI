@@ -4,8 +4,9 @@
 
 .grid-container {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 20px;
+  justify-content: center;
 }
 
 .grid-item {
@@ -23,16 +24,18 @@
 }
 
 .gauge-circle {
-  width: 120px;
-  height: 120px;
+  width: 8rem;
+  height: 8rem;
+  max-width: 150px;
+  max-height: 150px;
   border-radius: 50%;
-  border: 10px solid #4CAF50;
+  border: 10px solid #388E3C; /* Darker green for better contrast */
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2em;
+  font-size: 2.5rem; /* Relative unit for responsive sizing */
   font-weight: bold;
-  color: #3f51b5;
+  color: #283593; /* Darker blue for better contrast */
   margin-bottom: 10px;
 }
 

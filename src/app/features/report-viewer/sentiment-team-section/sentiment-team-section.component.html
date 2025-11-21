@@ -1,32 +1,32 @@
 <div class="sentiment-team-section-container">
   <div class="grid-container">
     <div class="grid-item gauge-placeholder">
-      <div class="gauge-circle">
-        <span class="gauge-value">{{ sentimentReport?.sentimentScore }}</span>
+      <div class="gauge-circle" aria-label="Sentiment score gauge" tabindex="0">
+        <span class="gauge-value">{{ sentimentReport?.sentimentScore ?? 'N/A' }}</span>
       </div>
       <h3>Sentiment Score</h3>
     </div>
 
     <div class="grid-item text-box">
       <h3>Sentiment Summary</h3>
-      <p>{{ sentimentReport?.sentimentSummary }}</p>
+      <p aria-live="polite">{{ sentimentReport?.sentimentSummary ?? 'No sentiment data available.' }}</p>
     </div>
 
     <div class="grid-item text-box">
       <h3>Team Analysis</h3>
-      <p>{{ teamReport?.teamDescription }}</p>
+      <p aria-live="polite">{{ teamReport?.teamDescription ?? 'No team analysis available.' }}</p>
     </div>
 
-    <div class="grid-item community-metrics">
+    <div class="grid-item community-metrics" *ngIf="sentimentReport?.communityMetrics">
       <h4>Community Metrics:</h4>
       <ul>
-        <li>Mentions: {{ sentimentReport?.communityMetrics?.mentions }}</li>
-        <li>Positive Mentions: {{ sentimentReport?.communityMetrics?.positiveMentions }}</li>
-        <li>Negative Mentions: {{ sentimentReport?.communityMetrics?.negativeMentions }}</li>
+        <li>Mentions: {{ sentimentReport?.communityMetrics?.mentions ?? 0 }}</li>
+        <li>Positive Mentions: {{ sentimentReport?.communityMetrics?.positiveMentions ?? 0 }}</li>
+        <li>Negative Mentions: {{ sentimentReport?.communityMetrics?.negativeMentions ?? 0 }}</li>
       </ul>
     </div>
 
-    <div class="grid-item risk-indicators">
+    <div class="grid-item risk-indicators" *ngIf="teamReport?.riskIndicators?.length">
       <h4>Risk Indicators:</h4>
       <ul>
         <li *ngFor="let indicator of teamReport?.riskIndicators">{{ indicator }}</li>
