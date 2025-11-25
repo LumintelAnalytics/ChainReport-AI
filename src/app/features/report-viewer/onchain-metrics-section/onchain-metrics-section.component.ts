@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
+import { ChainReport } from 'src/app/models/chain-report.model';
 
 @Component({
   selector: 'app-onchain-metrics-section',
@@ -9,4 +10,6 @@ import { MatCardModule } from '@angular/material/card';
   templateUrl: './onchain-metrics-section.component.html',
   styleUrl: './onchain-metrics-section.component.scss',
 })
-export class OnchainMetricsSectionComponent {}
+export class OnchainMetricsSectionComponent {
+  @Input() chainReport: ChainReport | undefined;
+}
