@@ -78,9 +78,9 @@ describe('OnchainMetricsSectionComponent', () => {
   it('should handle null or undefined values gracefully in onchainMovements', () => {
     const partialChainReport: ChainReport = {
       ...mockChainReport,
-      holderActivity: { ...mockChainReport.holderActivity, totalHolders: undefined },
-      whaleMovements: { ...mockChainReport.whaleMovements, whaleTransactionsCount: undefined },
-      onchainMetrics: { ...mockChainReport.onchainMetrics, largeTransactions: undefined },
+      holderActivity: { ...mockChainReport.holderActivity, totalHolders: undefined as any },
+      whaleMovements: { ...mockChainReport.whaleMovements, whaleTransactionsCount: undefined as any },
+      onchainMetrics: { ...mockChainReport.onchainMetrics, largeTransactions: undefined as any },
     };
     component.chainReport = partialChainReport;
     const expectedMovements: OnchainMovement[] = [

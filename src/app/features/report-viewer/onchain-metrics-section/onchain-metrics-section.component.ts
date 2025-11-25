@@ -7,7 +7,7 @@ import { ChainReport } from 'src/app/models/chain-report.model';
 export interface OnchainMovement {
   metric: string;
   value: string;
-  change: string;
+  change?: string;
 }
 
 
