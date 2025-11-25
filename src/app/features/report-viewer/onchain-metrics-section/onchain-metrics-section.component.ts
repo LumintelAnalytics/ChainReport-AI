@@ -10,12 +10,7 @@ export interface OnchainMovement {
   change: string;
 }
 
-const ELEMENT_DATA: OnchainMovement[] = [
-  { metric: 'Holder Changes', value: '1,234', change: '+5%' },
-  { metric: 'Whale Movements', value: '56', change: '-2%' },
-  { metric: 'Large Inflow', value: '12', change: '+10%' },
-  { metric: 'Large Outflow', value: '8', change: '-3%' },
-];
+
 
 @Component({
   selector: 'app-onchain-metrics-section',
@@ -28,5 +23,29 @@ export class OnchainMetricsSectionComponent {
   @Input() chainReport: ChainReport | undefined;
 
   displayedColumns: string[] = ['metric', 'value', 'change'];
-  onchainMovements = ELEMENT_DATA;
+get onchainMovements(): OnchainMovement[] {
+  if (!this.chainReport) return [];
+
+  const movements: OnchainMovement[] = [];
+
+  // Holder Changes
+  if (this.chainReport.holderActivity) {
+    movements.push({
+      metric: 'Holder Changes',
+      value: this.chainReport.holderActivity.totalHolders?.toLocaleString() || '0',
+      change: 'N/A' // Placeholder, requires historical data for calculation
+    });
+  }
+
+  // Whale Movements
+  if (this.chainReport.whaleMovements) {
+    movements.push({
+      metric: 'Whale Movements',
+      value: this.chainReport.whaleMovements.whaleTransactionsCount?.toLocaleString() || '0',
+      change: 'N/A' // Placeholder, requires historical data for calculation
+    });
+  }
+
+  return movements;
+}
 }
