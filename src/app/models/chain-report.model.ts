@@ -5,6 +5,7 @@ export interface OnchainMetrics {
   newAddresses: number;
   transactionVolume: number;
   averageTransactionValue: number;
+  largeTransactions: number;
 }
 
 export interface HolderActivity {

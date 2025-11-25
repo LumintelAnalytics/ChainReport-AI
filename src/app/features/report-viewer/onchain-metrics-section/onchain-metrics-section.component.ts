@@ -22,18 +22,22 @@ export interface OnchainMovement {
 export class OnchainMetricsSectionComponent {
   @Input() chainReport: ChainReport | undefined;
 
-  displayedColumns: string[] = ['metric', 'value', 'change'];
+  displayedColumns: string[] = ['metric', 'value'];
 get onchainMovements(): OnchainMovement[] {
   if (!this.chainReport) return [];
 
   const movements: OnchainMovement[] = [];
 
-  // Holder Changes
+  // TODO: Implement computeChange(currentValue, previousValue) when historical data is available.
+  // This will involve fetching and comparing current and historical 24h values, 
+  // computing the percentage and signed delta, and formatting it with appropriate +/- and color classes.
+  // A tracking issue should be created to document the missing historical data and the planned computeChange implementation.
+
+  // Total Holders
   if (this.chainReport.holderActivity) {
     movements.push({
-      metric: 'Holder Changes',
+      metric: 'Total Holders',
       value: this.chainReport.holderActivity.totalHolders?.toLocaleString() || '0',
-      change: 'N/A' // Placeholder, requires historical data for calculation
     });
   }
 
@@ -42,7 +46,14 @@ get onchainMovements(): OnchainMovement[] {
     movements.push({
       metric: 'Whale Movements',
       value: this.chainReport.whaleMovements.whaleTransactionsCount?.toLocaleString() || '0',
-      change: 'N/A' // Placeholder, requires historical data for calculation
+    });
+  }
+
+  // Large Transactions
+  if (this.chainReport.onchainMetrics.largeTransactions) {
+    movements.push({
+      metric: 'Large Transactions',
+      value: this.chainReport.onchainMetrics.largeTransactions?.toLocaleString() || '0',
     });
   }
 
