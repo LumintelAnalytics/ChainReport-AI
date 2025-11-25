@@ -50,7 +50,7 @@ get onchainMovements(): OnchainMovement[] {
   }
 
   // Large Transactions
-  if (this.chainReport.onchainMetrics.largeTransactions) {
+  if (this.chainReport.onchainMetrics && this.chainReport.onchainMetrics.largeTransactions) {
     movements.push({
       metric: 'Large Transactions',
       value: this.chainReport.onchainMetrics.largeTransactions?.toLocaleString() || '0',
