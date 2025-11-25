@@ -3,7 +3,7 @@ import { ReportService } from '../../../core/services/report.service';
 import { FinalReportData } from '../../../models/report-api.models';
 import { Subscription, switchMap, tap, of } from 'rxjs';
 import { TokenomicsSectionComponent } from '../tokenomics-section/tokenomics-section.component';
-import { OnchainMetricsSectionComponent } from '../onchain-metrics-section/onchain-metrics-section.component';
+import { OnchainMetricsSectionComponent } from '../../report-viewer/onchain-metrics-section/onchain-metrics-section.component';
 
 @Component({
   selector: 'app-report-viewer',
