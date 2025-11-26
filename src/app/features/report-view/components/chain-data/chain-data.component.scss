@@ -1,11 +1,5 @@
+@use '../../styles/shared' as *;
+
 .chart-wrapper {
-  height: 300px;
-  margin-bottom: 20px;
-  border: 1px solid #ccc;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #f9f9f9;
-  color: #555;
-  font-style: italic;
+  @include chart-wrapper-styles;
 }
