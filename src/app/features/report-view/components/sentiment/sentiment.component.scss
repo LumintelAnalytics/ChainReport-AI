@@ -1,0 +1,5 @@
+@use '../../styles/shared' as *;
+
+.chart-wrapper {
+  @include chart-wrapper-styles;
+}
