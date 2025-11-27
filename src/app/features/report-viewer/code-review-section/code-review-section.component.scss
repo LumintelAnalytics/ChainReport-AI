@@ -1,3 +1,23 @@
+.code-review-section {
+  margin-bottom: 2rem;
+}
+
+.panel-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.panel {
+  background-color: var(--color-surface-2);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-elevation-1);
+  padding: 1.5rem;
+  flex: 1 1 calc(33% - 1rem); /* Adjust for 3 columns with gap */
+  box-sizing: border-box;
+  min-width: 300px; /* Minimum width for panels before wrapping */
+}
+
 .status-tags {
   margin-bottom: 1rem;
 }
@@ -14,6 +34,7 @@
 
 .low-activity {
   background-color: #ffc107; /* Amber */
+  color: black;
 }
 
 .outdated-code {

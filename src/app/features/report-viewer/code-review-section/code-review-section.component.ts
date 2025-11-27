@@ -3,7 +3,7 @@ import { Component, Input } from '@angular/core';
 @Component({
   selector: 'app-code-review-section',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './code-review-section.component.html',
   styleUrl: './code-review-section.component.scss'
 })
