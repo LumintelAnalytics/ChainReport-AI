@@ -1,0 +1,9 @@
+.audit-review-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Space between mat-cards */
+}
+
+mat-card {
+  width: 100%;
+}
