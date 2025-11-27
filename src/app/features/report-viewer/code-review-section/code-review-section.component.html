@@ -1,6 +1,12 @@
 <div class="code-review-section">
   <h2>Code Review</h2>
 
+  <div class="status-tags">
+    <span *ngIf="lowActivity" class="status-tag low-activity">Low Activity</span>
+    <span *ngIf="outdatedCode" class="status-tag outdated-code">Outdated Code</span>
+    <span *ngIf="poorDocumentation" class="status-tag poor-documentation">Poor Documentation</span>
+  </div>
+
   <div class="panel-container">
     <div class="panel">
       <h3>Repository Activity</h3>
