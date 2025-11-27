@@ -1,42 +1,101 @@
 .onchain-metrics-section {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 20px;
-  justify-content: space-around;
+  margin-bottom: 20px;
 
-  mat-card {
-    flex: 1 1 calc(33% - 20px);
-    min-width: 280px;
-    box-sizing: border-box;
+  .mat-card {
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    .mat-card-title {
+      font-size: 1.2em;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .mat-card-content p {
+      font-size: 1.5em;
+      font-weight: 700;
+      color: #3f51b5; /* Primary color */
+    }
+  }
+
+  .warning-indicators-card {
+    .indicator-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+
+      mat-icon {
+        margin-right: 8px;
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+      }
+
+      span {
+        font-size: 1em;
+      }
+
+      .risk-low {
+        color: #4CAF50; /* Green */
+      }
+
+      .risk-medium {
+        color: #FFC107; /* Amber */
+      }
+
+      .risk-high {
+        color: #F44336; /* Red */
+      }
+
+      .warn {
+        color: #FFC107; /* Amber for general warnings */
+      }
+    }
   }
 }
 
 .onchain-table-card {
   margin-top: 20px;
-  width: 100%;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
-  .mat-mdc-card-header {
-    padding-bottom: 10px;
+  .mat-card-title {
+    font-size: 1.2em;
+    font-weight: 600;
+    margin-bottom: 15px;
   }
 
-  .mat-mdc-card-content {
-    padding: 0 16px 16px 16px;
-  }
-
-  .mat-mdc-table {
+  .mat-table {
     width: 100%;
-  }
+    border-collapse: collapse;
 
-  .mat-mdc-header-cell {
-    font-weight: bold;
-    color: #3f51b5; // Example color from the theme
-  }
+    .mat-header-cell {
+      font-weight: 600;
+      color: rgba(0, 0, 0, 0.6);
+      font-size: 0.9em;
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+      text-align: left;
+    }
 
-  .mat-mdc-cell {
-    border-bottom-color: #e0e0e0;
-  }
+    .mat-cell {
+      font-size: 0.9em;
+      color: rgba(0, 0, 0, 0.87);
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
 
-  .mat-mdc-row:hover {
-    background-color: #f5f5f5;
+    .mat-row:last-child .mat-cell {
+      border-bottom: none;
+    }
+
+    .mat-row:hover {
+      background-color: #f5f5f5;
+    }
   }
 }
