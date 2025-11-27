@@ -4,11 +4,12 @@ import { FinalReportData } from '../../../models/report-api.models';
 import { Subscription, switchMap, tap, of } from 'rxjs';
 import { TokenomicsSectionComponent } from '../tokenomics-section/tokenomics-section.component';
 import { OnchainMetricsSectionComponent } from '../../report-viewer/onchain-metrics-section/onchain-metrics-section.component';
+import { CodeReviewSectionComponent } from '../../report-viewer/code-review-section/code-review-section.component';
 
 @Component({
   selector: 'app-report-viewer',
   standalone: true,
-  imports: [CommonModule, MatTabsModule, MatButtonModule, MatIconModule, MatListModule, RouterModule, TokenomicsSectionComponent, OnchainMetricsSectionComponent],
+  imports: [CommonModule, MatTabsModule, MatButtonModule, MatIconModule, MatListModule, RouterModule, TokenomicsSectionComponent, OnchainMetricsSectionComponent, CodeReviewSectionComponent],
   templateUrl: './report-viewer.component.html',
   styleUrl: './report-viewer.component.scss',
 })
