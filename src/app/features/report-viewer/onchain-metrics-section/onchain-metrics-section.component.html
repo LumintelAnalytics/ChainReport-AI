@@ -26,24 +26,24 @@
     </mat-card-content>
   </mat-card>
 
-  <mat-card *ngIf="chainReport?.warningIndicators" class="warning-indicators-card">
+  <mat-card *ngIf="chainReport?.warningIndicators as indicators" class="warning-indicators-card">
     <mat-card-header>
       <mat-card-title>Warning Indicators</mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <div class="indicator-item">
-        <mat-icon [ngClass]="getRiskLevelClass(chainReport.warningIndicators.riskLevel)">{{ getRiskLevelIcon(chainReport.warningIndicators.riskLevel) }}</mat-icon>
-        <span>Risk Level: {{ chainReport.warningIndicators.riskLevel | titlecase }}</span>
+        <mat-icon [ngClass]="getRiskLevelClass(indicators.riskLevel)">{{ getRiskLevelIcon(indicators.riskLevel) }}</mat-icon>
+        <span>Risk Level: {{ indicators.riskLevel | titlecase }}</span>
       </div>
-      <div *ngIf="chainReport.warningIndicators.hasSuspiciousActivity" class="indicator-item">
+      <div *ngIf="indicators.hasSuspiciousActivity" class="indicator-item">
         <mat-icon class="warn">warning</mat-icon>
         <span>Suspicious Activity Detected</span>
       </div>
-      <div *ngIf="chainReport.warningIndicators.suspiciousTransactions > 0" class="indicator-item">
+      <div *ngIf="indicators.suspiciousTransactions > 0" class="indicator-item">
         <mat-icon class="warn">error_outline</mat-icon>
-        <span>Suspicious Transactions: {{ chainReport.warningIndicators.suspiciousTransactions | number }}</span>
+        <span>Suspicious Transactions: {{ indicators.suspiciousTransactions | number }}</span>
       </div>
-      <div *ngIf="chainReport.warningIndicators.unusualVolumeSpikes" class="indicator-item">
+      <div *ngIf="indicators.unusualVolumeSpikes" class="indicator-item">
         <mat-icon class="warn">trending_up</mat-icon>
         <span>Unusual Volume Spikes</span>
       </div>
