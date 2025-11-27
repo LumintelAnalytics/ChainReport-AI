@@ -27,6 +27,13 @@ export interface WhaleMovements {
   topHolders: WhaleHolder[];
 }
 
+export interface WarningIndicators {
+  hasSuspiciousActivity: boolean;
+  riskLevel: 'low' | 'medium' | 'high';
+  suspiciousTransactions: number;
+  unusualVolumeSpikes: boolean;
+}
+
 export interface ChainReport {
   reportId: string;
   tokenId: string;
@@ -34,5 +41,6 @@ export interface ChainReport {
   onchainMetrics: OnchainMetrics;
   holderActivity: HolderActivity;
   whaleMovements: WhaleMovements;
+  warningIndicators?: WarningIndicators; // Make it optional for now
   // Add other relevant sections as needed, e.g., sentiment, tokenomics
 }
