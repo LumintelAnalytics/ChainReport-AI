@@ -33,7 +33,7 @@
 }
 
 .low-activity {
-  background-color: #ffc107; /* Amber */
+  background-color: var(--color-warning); /* Darker amber for WCAG-AA compliance with black text */
   color: black;
 }
 
