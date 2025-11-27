@@ -16,6 +16,14 @@ $lumintel-primary: mat.define-palette(mat.$blue-grey-palette, 700, 500, 900);
 $lumintel-accent: mat.define-palette(mat.$light-blue-palette, A200, A100, A400);
 $lumintel-warn: mat.define-palette(mat.$red-palette);
 
+// Define custom CSS variables for colors
+:root {
+  --color-warning: #CC8400; /* Darker amber for WCAG-AA compliance with black text */
+  --color-surface-2: #f5f5f5; /* A light grey for secondary surfaces */
+  --border-radius: 8px; /* Standard border radius */
+  --shadow-elevation-1: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
 // Create the theme object
 $lumintel-theme: mat.define-light-theme((
   color: (
