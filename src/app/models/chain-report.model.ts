@@ -42,5 +42,16 @@ export interface ChainReport {
   holderActivity: HolderActivity;
   whaleMovements: WhaleMovements;
   warningIndicators?: WarningIndicators; // Make it optional for now
+  whitepaperReview?: WhitepaperReview;
   // Add other relevant sections as needed, e.g., sentiment, tokenomics
+}
+
+export interface KeyTakeaway {
+  title: string;
+  description: string;
+}
+
+export interface WhitepaperReview {
+  keyTakeaways: KeyTakeaway[];
+  // Other potential fields related to whitepaper review
 }

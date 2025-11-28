@@ -5,3 +5,13 @@
     <!-- Placeholder for AI generated summary -->
   </div>
 </div>
+
+<div *ngIf="report?.whitepaperReview?.keyTakeaways?.length">
+  <h3>Key Takeaways from Whitepaper Review</h3>
+  <div class="key-takeaways-summary">
+    <div *ngFor="let takeaway of report.whitepaperReview.keyTakeaways" class="key-takeaway-item">
+      <h4>{{ takeaway.title }}</h4>
+      <p>{{ takeaway.description }}</p>
+    </div>
+  </div>
+</div>
