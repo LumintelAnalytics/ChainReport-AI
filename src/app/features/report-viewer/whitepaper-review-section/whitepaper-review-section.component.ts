@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ChainReport } from '../../../../models/chain-report.model';
+import { ChainReport } from '../../../models/chain-report.model';
 
 @Component({
   selector: 'app-whitepaper-review-section',
