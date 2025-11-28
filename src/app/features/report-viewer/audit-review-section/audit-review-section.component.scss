@@ -1,9 +1,46 @@
-.audit-review-section {
+:host {
+  display: block;
+  padding: 16px;
+}
+
+.risk-score-container {
   display: flex;
-  flex-direction: column;
-  gap: 20px; /* Space between mat-cards */
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.risk-score-label {
+  font-weight: bold;
+  margin-right: 8px;
+  color: var(--text-color);
+}
+
+.risk-score-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  min-width: 40px;
+}
+
+.risk-low {
+  background-color: var(--color-green-500);
+}
+
+.risk-medium {
+  background-color: var(--color-orange-500);
+}
+
+.risk-high {
+  background-color: var(--color-red-500);
 }
 
 mat-card {
-  width: 100%;
+  background-color: var(--color-surface);
+  color: var(--text-color);
+}
+
+mat-card-title {
+  color: var(--text-color-dark);
 }

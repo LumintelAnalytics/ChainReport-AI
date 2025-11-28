@@ -1,31 +1,22 @@
-<div class="audit-review-section">
-  <mat-card>
-    <mat-card-header>
-      <mat-card-title>Audit Presence</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <!-- Content for Audit Presence -->
-      <p>Details about the audit's presence.</p>
-    </mat-card-content>
-  </mat-card>
-
-  <mat-card>
-    <mat-card-header>
-      <mat-card-title>Audit Vendor Credibility</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <!-- Content for Audit Vendor Credibility -->
-      <p>Details about the credibility of the audit vendor.</p>
-    </mat-card-content>
-  </mat-card>
-
-  <mat-card>
-    <mat-card-header>
-      <mat-card-title>Vulnerability Summaries</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <!-- Content for Vulnerability Summaries -->
-      <p>Summary of vulnerabilities found during the audit.</p>
-    </mat-card-content>
-  </mat-card>
-</div>
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Audit Review</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <div *ngIf="chainReport && chainReport.riskScore" class="risk-score-container">
+      <div class="risk-score-label">Risk Score:</div>
+      <div
+        class="risk-score-tag"
+        [ngClass]="{
+          'risk-low': chainReport.riskScore <= 3,
+          'risk-medium': chainReport.riskScore > 3 && chainReport.riskScore <= 7,
+          'risk-high': chainReport.riskScore > 7
+        }"
+      >
+        {{ chainReport.riskScore }}
+      </div>
+    </div>
+    <!-- Existing content of the audit review section would go here -->
+    <p>Details about the audit review will be displayed here.</p>
+  </mat-card-content>
+</mat-card>
