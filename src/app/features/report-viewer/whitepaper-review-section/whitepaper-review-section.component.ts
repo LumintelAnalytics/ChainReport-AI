@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ChainReport } from '../../../../models/chain-report.model';
 
 @Component({
   selector: 'app-whitepaper-review-section',
@@ -8,4 +9,6 @@ import { CommonModule } from '@angular/common';
   templateUrl: './whitepaper-review-section.component.html',
   styleUrl: './whitepaper-review-section.component.scss',
 })
-export class WhitepaperReviewSectionComponent {}
+export class WhitepaperReviewSectionComponent {
+  @Input() report?: ChainReport;
+}
