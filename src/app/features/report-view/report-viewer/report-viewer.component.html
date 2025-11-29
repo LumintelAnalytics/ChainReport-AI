@@ -65,6 +65,11 @@
             <pre>{{ reportData.chainData | json }}</pre>
           </div>
         </mat-tab>
+        <mat-tab label="Final Summary">
+          <div class="tab-content">
+            <app-final-summary [reportData]="reportData"></app-final-summary>
+          </div>
+        </mat-tab>
       </mat-tab-group>
     </div>
 
@@ -76,6 +81,7 @@
           <a mat-list-item routerLink="./team" routerLinkActive="active">Team</a>
           <a mat-list-item routerLink="./whitepaper-review" routerLinkActive="active">Whitepaper Review</a>
           <a mat-list-item routerLink="./chain-data" routerLinkActive="active">Chain Data</a>
+          <a mat-list-item routerLink="./final-summary" routerLinkActive="active">Final Summary</a>
         </mat-nav-list>
         <div class="sidebar-content">
           <router-outlet></router-outlet>

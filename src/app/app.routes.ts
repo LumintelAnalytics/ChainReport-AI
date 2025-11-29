@@ -6,6 +6,7 @@ import { SentimentComponent } from './features/report-view/components/sentiment/
 import { TeamComponent } from './features/report-view/components/team/team.component';
 import { ChainDataComponent } from './features/report-view/components/chain-data/chain-data.component';
 import { WhitepaperReviewSectionComponent } from './features/report-viewer/whitepaper-review-section/whitepaper-review-section.component';
+import { FinalSummaryComponent } from './features/report-viewer/final-summary/final-summary.component';
 
 export const routes: Routes = [
   {
@@ -24,6 +25,7 @@ export const routes: Routes = [
           { path: 'team', component: TeamComponent },
           { path: 'whitepaper-review', component: WhitepaperReviewSectionComponent },
           { path: 'chain-data', component: ChainDataComponent },
+          { path: 'final-summary', component: FinalSummaryComponent },
           { path: '', redirectTo: 'tokenomics', pathMatch: 'full' }
         ]
       },
