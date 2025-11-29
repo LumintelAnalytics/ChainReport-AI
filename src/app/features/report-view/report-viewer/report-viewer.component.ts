@@ -6,11 +6,12 @@ import { TokenomicsSectionComponent } from '../tokenomics-section/tokenomics-sec
 import { OnchainMetricsSectionComponent } from '../../report-viewer/onchain-metrics-section/onchain-metrics-section.component';
 import { CodeReviewSectionComponent } from '../../report-viewer/code-review-section/code-review-section.component';
 import { WhitepaperReviewSectionComponent } from '../../report-viewer/whitepaper-review-section/whitepaper-review-section.component';
+import { FinalSummaryComponent } from '../final-summary/final-summary.component';
 
 @Component({
   selector: 'app-report-viewer',
   standalone: true,
-  imports: [CommonModule, MatTabsModule, MatButtonModule, MatIconModule, MatListModule, RouterModule, TokenomicsSectionComponent, OnchainMetricsSectionComponent, CodeReviewSectionComponent, WhitepaperReviewSectionComponent],
+  imports: [CommonModule, MatTabsModule, MatButtonModule, MatIconModule, MatListModule, RouterModule, TokenomicsSectionComponent, OnchainMetricsSectionComponent, CodeReviewSectionComponent, WhitepaperReviewSectionComponent, FinalSummaryComponent],
   templateUrl: './report-viewer.component.html',
   styleUrl: './report-viewer.component.scss',
 })
