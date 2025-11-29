@@ -1,0 +1,9 @@
+@import './_theme.scss';
+
+.report-section-header {
+  font-size: 2em;
+  color: $primary-color; /* Assuming $primary-color is defined in _theme.scss */
+  margin-bottom: 1em;
+  border-bottom: 2px solid $accent-color; /* Assuming $accent-color is defined in _theme.scss */
+  padding-bottom: 0.5em;
+}
