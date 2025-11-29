@@ -4,23 +4,28 @@
     <p>This section provides a comprehensive, AI-driven summary of the Chain Report, highlighting key insights, potential risks, and strategic recommendations.</p>
     
     <h3>Overall Assessment</h3>
-    <p>[AI Generated Overall Assessment will be displayed here]</p>
+    <p *ngIf="reportData?.finalSummary?.overallAssessment; else noOverallAssessment">
+      {{ reportData.finalSummary.overallAssessment }}
+    </p>
+    <ng-template #noOverallAssessment><p>No overall assessment available.</p></ng-template>
 
     <h3>Key Findings</h3>
-    <ul>
-      <li>[AI Generated Key Finding 1]</li>
-      <li>[AI Generated Key Finding 2]</li>
-      <li>[AI Generated Key Finding 3]</li>
+    <ul *ngIf="reportData?.finalSummary?.keyFindings?.length; else noKeyFindings">
+      <li *ngFor="let finding of reportData.finalSummary.keyFindings">{{ finding }}</li>
     </ul>
+    <ng-template #noKeyFindings><ul><li>No key findings available.</li></ul></ng-template>
 
     <h3>Risk Analysis</h3>
-    <p>[AI Generated Risk Analysis will be displayed here]</p>
+    <p *ngIf="reportData?.finalSummary?.riskAnalysis; else noRiskAnalysis">
+      {{ reportData.finalSummary.riskAnalysis }}
+    </p>
+    <ng-template #noRiskAnalysis><p>No risk analysis available.</p></ng-template>
 
     <h3>Recommendations</h3>
-    <ol>
-      <li>[AI Generated Recommendation 1]</li>
-      <li>[AI Generated Recommendation 2]</li>
+    <ol *ngIf="reportData?.finalSummary?.recommendations?.length; else noRecommendations">
+      <li *ngFor="let recommendation of reportData.finalSummary.recommendations">{{ recommendation }}</li>
     </ol>
+    <ng-template #noRecommendations><ol><li>No recommendations available.</li></ol></ng-template>
 
     <p class="disclaimer">Disclaimer: This analysis is AI-generated and should be validated with further due diligence.</p>
   </div>
