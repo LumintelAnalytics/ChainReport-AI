@@ -11,4 +11,6 @@ import { FinalReportData } from '../../../models/report-api.models';
 })
 export class FinalSummaryComponent {
   @Input() reportData: FinalReportData | null = null;
+  @Input() summaryText: string = '';
+  @Input() importantFindings: string[] = [];
 }

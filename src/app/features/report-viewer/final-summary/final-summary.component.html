@@ -4,14 +4,14 @@
     <p>This section provides a comprehensive, AI-driven summary of the Chain Report, highlighting key insights, potential risks, and strategic recommendations.</p>
     
     <h3>Overall Assessment</h3>
-    <p *ngIf="reportData?.finalSummary?.overallAssessment; else noOverallAssessment">
-      {{ reportData.finalSummary.overallAssessment }}
+    <p *ngIf="summaryText; else noOverallAssessment">
+      {{ summaryText }}
     </p>
     <ng-template #noOverallAssessment><p>No overall assessment available.</p></ng-template>
 
     <h3>Key Findings</h3>
-    <ul *ngIf="reportData?.finalSummary?.keyFindings?.length; else noKeyFindings">
-      <li *ngFor="let finding of reportData.finalSummary.keyFindings">{{ finding }}</li>
+    <ul *ngIf="importantFindings.length; else noKeyFindings">
+      <li *ngFor="let finding of importantFindings">{{ finding }}</li>
     </ul>
     <ng-template #noKeyFindings><ul><li>No key findings available.</li></ul></ng-template>
 
