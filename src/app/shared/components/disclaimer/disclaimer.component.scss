@@ -1,10 +1,15 @@
 .disclaimer-container {
-  border: 1px solid #ffcc00; /* Example highlight color */
-  background-color: #fffacd; /* Example light background color */
-  padding: 15px;
-  margin-top: 20px;
-  border-radius: 5px;
   font-size: 0.9em;
+  color: #7f8c8d; /* From final-summary */
+  text-align: center; /* From final-summary */
+  margin-top: 40px; /* From final-summary */
+  padding-top: 20px; /* From final-summary */
+  border-top: 1px dashed #e0e0e0; /* From final-summary */
+  
+  /* Retaining some original disclaimer-container styles, adjusting as needed */
+  padding: 15px; /* Keep padding from disclaimer-container */
+  border-radius: 5px; /* Keep border-radius from disclaimer-container */
+  /* Removing border and background color to prioritize the subtle separation from final-summary */
 
   p {
     font-weight: bold;
