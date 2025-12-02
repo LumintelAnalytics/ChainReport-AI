@@ -3,7 +3,7 @@
     <mat-card-title class="report-section-header">Audit Review</mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <div *ngIf="chainReport && chainReport.riskScore" class="risk-score-container">
+    <div *ngIf="chainReport && chainReport.riskScore !== undefined" class="risk-score-container">
       <div class="risk-score-label">Risk Score:</div>
       <div
         class="risk-score-tag"
@@ -16,7 +16,37 @@
         {{ chainReport.riskScore }}
       </div>
     </div>
-    <!-- Existing content of the audit review section would go here -->
-    <p>Details about the audit review will be displayed here.</p>
+
+    <div class="summary-cards-grid">
+      <mat-card class="summary-card">
+        <mat-card-header>
+          <mat-card-title>Vulnerability Count</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p>{{ chainReport?.auditReport?.vulnerabilityCount ?? 'N/A' }}</p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="summary-card">
+        <mat-card-header>
+          <mat-card-title>Audit Date</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p>{{ chainReport?.auditReport?.auditDate | date || 'N/A' }}</p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="summary-card">
+        <mat-card-header>
+          <mat-card-title>Key Findings</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <ul>
+            <li *ngFor="let finding of chainReport?.auditReport?.keyFindings">{{ finding }}</li>
+            <li *ngIf="!chainReport?.auditReport?.keyFindings?.length">N/A</li>
+          </ul>
+        </mat-card-content>
+      </mat-card>
+    </div>
   </mat-card-content>
 </mat-card>
