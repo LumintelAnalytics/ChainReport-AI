@@ -60,6 +60,6 @@ export interface ChainReport {
   warningIndicators?: WarningIndicators; // Make it optional for now
   whitepaperReview?: WhitepaperReview;
   auditReport?: AuditReport; // Add this line
-  riskScore: number; // Add riskScore
+  riskScore?: number; // Add riskScore
 }
 

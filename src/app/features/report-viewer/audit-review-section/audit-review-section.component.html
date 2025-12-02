@@ -3,7 +3,7 @@
     <mat-card-title class="report-section-header">Audit Review</mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <div *ngIf="chainReport && chainReport.riskScore" class="risk-score-container">
+    <div *ngIf="chainReport && chainReport.riskScore !== undefined" class="risk-score-container">
       <div class="risk-score-label">Risk Score:</div>
       <div
         class="risk-score-tag"
@@ -23,7 +23,7 @@
           <mat-card-title>Vulnerability Count</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-          <p>{{ chainReport?.auditReport?.vulnerabilityCount || 'N/A' }}</p>
+          <p>{{ chainReport?.auditReport?.vulnerabilityCount ?? 'N/A' }}</p>
         </mat-card-content>
       </mat-card>
 
