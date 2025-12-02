@@ -46,3 +46,35 @@ mat-card {
 mat-card-title {
   color: var(--text-color-dark);
 }
+
+.summary-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.summary-card {
+  mat-card-header {
+    padding-bottom: 8px;
+  }
+
+  mat-card-title {
+    font-size: 1.1em;
+    font-weight: 600;
+  }
+
+  mat-card-content {
+    ul {
+      list-style: none;
+      padding-left: 0;
+      margin-top: 8px;
+    }
+    li {
+      margin-bottom: 4px;
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
