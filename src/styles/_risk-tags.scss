@@ -14,14 +14,14 @@
 }
 
 .risk-label-low {
-  background-color: #28a745; // Green
+  background-color: var(--color-green-500);
 }
 
 .risk-label-medium {
-  background-color: #ffc107; // Yellow/Orange
-  color: #343a40; // Dark text for better contrast on yellow
+  background-color: var(--color-orange-500);
+  color: var(--color-gray-800);
 }
 
 .risk-label-high {
-  background-color: #dc3545; // Red
+  background-color: var(--color-red-500);
 }

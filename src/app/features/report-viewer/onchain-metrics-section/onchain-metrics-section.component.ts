@@ -76,6 +76,6 @@ export class OnchainMetricsSectionComponent {
   }
 
   getRiskLevelClass(riskLevel: WarningIndicators['riskLevel']): string {
-    return `risk-${riskLevel}`;
+    return `risk-label-${riskLevel}`;
   }
 }

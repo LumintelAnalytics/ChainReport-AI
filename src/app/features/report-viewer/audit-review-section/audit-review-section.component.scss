@@ -1,5 +1,5 @@
 @import '../../../styles/_report-section-header.scss';
-@import '../../../styles/risk-tags';
+@import '../../../styles/_risk-tags.scss';
 
 :host {
   display: block;
@@ -27,17 +27,7 @@
   min-width: 40px;
 }
 
-.risk-low {
-  background-color: var(--color-green-500);
-}
 
-.risk-medium {
-  background-color: var(--color-orange-500);
-}
-
-.risk-high {
-  background-color: var(--color-red-500);
-}
 
 mat-card {
   background-color: var(--color-surface);
