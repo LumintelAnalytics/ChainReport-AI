@@ -84,20 +84,3 @@
   overflow-x: auto;
   -webkit-overflow-scrolling: touch; /* For smoother scrolling on iOS */
 }
-
-/* Responsive styles for charts (assuming a container class) */
-.chart-container {
-  position: relative;
-  height: 400px; /* Default height */
-  width: 100%;
-  margin-bottom: 20px;
-
-  @media (max-width: 768px) {
-    height: 300px;
-  }
-
-  @media (max-width: 480px) {
-    height: 250px;
-  }
-}
-}
