@@ -7,11 +7,13 @@ import { OnchainMetricsSectionComponent } from '../../report-viewer/onchain-metr
 import { CodeReviewSectionComponent } from '../../report-viewer/code-review-section/code-review-section.component';
 import { WhitepaperReviewSectionComponent } from '../../report-viewer/whitepaper-review-section/whitepaper-review-section.component';
 import { FinalSummaryComponent } from '../../report-viewer/final-summary/final-summary.component';
+import { AuditReviewSectionComponent } from '../../report-viewer/audit-review-section/audit-review-section.component';
+import { SentimentTeamSectionComponent } from '../../report-viewer/sentiment-team-section/sentiment-team-section.component';
 
 @Component({
   selector: 'app-report-viewer',
   standalone: true,
-  imports: [CommonModule, MatTabsModule, MatButtonModule, MatIconModule, MatListModule, RouterModule, TokenomicsSectionComponent, OnchainMetricsSectionComponent, CodeReviewSectionComponent, WhitepaperReviewSectionComponent, FinalSummaryComponent],
+  imports: [CommonModule, MatTabsModule, MatButtonModule, MatIconModule, MatListModule, RouterModule, TokenomicsSectionComponent, OnchainMetricsSectionComponent, CodeReviewSectionComponent, WhitepaperReviewSectionComponent, FinalSummaryComponent, AuditReviewSectionComponent, SentimentTeamSectionComponent],
   templateUrl: './report-viewer.component.html',
   styleUrl: './report-viewer.component.scss',
 })
