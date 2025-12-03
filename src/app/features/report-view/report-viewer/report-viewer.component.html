@@ -34,29 +34,27 @@
         </mat-tab>
         <mat-tab label="Onchain Metrics">
           <div class="tab-content">
-            <app-onchain-metrics-section></app-onchain-metrics-section>
+            <app-onchain-metrics-section [onchainMetricsReport]="reportData.onchainMetrics"></app-onchain-metrics-section>
           </div>
         </mat-tab>
         <mat-tab label="Code Review">
           <div class="tab-content">
-            <app-code-review-section></app-code-review-section>
+            <app-code-review-section [codeReviewReport]="reportData.codeReview"></app-code-review-section>
+          </div>
+        </mat-tab>
+        <mat-tab label="Audit Review">
+          <div class="tab-content">
+            <app-audit-review-section [auditReviewReport]="reportData.auditReview"></app-audit-review-section>
           </div>
         </mat-tab>
         <mat-tab label="Whitepaper Review">
           <div class="tab-content">
-            <app-whitepaper-review-section></app-whitepaper-review-section>
+            <app-whitepaper-review-section [whitepaperReviewReport]="reportData.whitepaperReview"></app-whitepaper-review-section>
           </div>
         </mat-tab>
-        <mat-tab label="Sentiment">
+        <mat-tab label="Sentiment & Team">
           <div class="tab-content">
-            <h3>Sentiment Analysis</h3>
-            <pre>{{ reportData.sentiment | json }}</pre>
-          </div>
-        </mat-tab>
-        <mat-tab label="Team">
-          <div class="tab-content">
-            <h3>Team Information</h3>
-            <pre>{{ reportData.team | json }}</pre>
+            <app-sentiment-team-section [sentimentReport]="reportData.sentiment" [teamReport]="reportData.team"></app-sentiment-team-section>
           </div>
         </mat-tab>
         <mat-tab label="Chain Data">
@@ -77,9 +75,11 @@
       <div class="sidebar-layout">
         <mat-nav-list class="sidebar-nav">
           <a mat-list-item routerLink="./tokenomics" routerLinkActive="active">Tokenomics</a>
-          <a mat-list-item routerLink="./sentiment" routerLinkActive="active">Sentiment</a>
-          <a mat-list-item routerLink="./team" routerLinkActive="active">Team</a>
+          <a mat-list-item routerLink="./onchain-metrics" routerLinkActive="active">Onchain Metrics</a>
+          <a mat-list-item routerLink="./code-review" routerLinkActive="active">Code Review</a>
+          <a mat-list-item routerLink="./audit-review" routerLinkActive="active">Audit Review</a>
           <a mat-list-item routerLink="./whitepaper-review" routerLinkActive="active">Whitepaper Review</a>
+          <a mat-list-item routerLink="./sentiment-team" routerLinkActive="active">Sentiment & Team</a>
           <a mat-list-item routerLink="./chain-data" routerLinkActive="active">Chain Data</a>
           <a mat-list-item routerLink="./final-summary" routerLinkActive="active">Final Summary</a>
         </mat-nav-list>
