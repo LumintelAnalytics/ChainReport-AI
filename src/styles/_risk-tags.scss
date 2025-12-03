@@ -1,0 +1,27 @@
+/*
+ * Reusable classes for risk labels (low, medium, high).
+ */
+
+.risk-label {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25em 0.6em;
+  border-radius: 0.25em;
+  font-size: 0.75em;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: white; // Default text color, can be overridden
+}
+
+.risk-label-low {
+  background-color: var(--color-green-500);
+}
+
+.risk-label-medium {
+  background-color: var(--color-orange-500);
+  color: var(--color-gray-800);
+}
+
+.risk-label-high {
+  background-color: var(--color-red-500);
+}

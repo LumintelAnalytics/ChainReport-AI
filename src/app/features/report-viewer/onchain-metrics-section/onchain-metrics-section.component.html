@@ -32,20 +32,20 @@
     </mat-card-header>
     <mat-card-content>
       <div class="indicator-item">
-        <mat-icon [ngClass]="getRiskLevelClass(indicators.riskLevel)">{{ getRiskLevelIcon(indicators.riskLevel) }}</mat-icon>
-        <span>Risk Level: {{ indicators.riskLevel | titlecase }}</span>
+        <mat-icon class="risk-label" [ngClass]="getRiskLevelClass(indicators.riskLevel)">{{ getRiskLevelIcon(indicators.riskLevel) }}</mat-icon>
+        <span class="risk-label" [ngClass]="getRiskLevelClass(indicators.riskLevel)">Risk Level: {{ indicators.riskLevel | titlecase }}</span>
       </div>
       <div *ngIf="indicators.hasSuspiciousActivity" class="indicator-item">
-        <mat-icon class="warn">warning</mat-icon>
-        <span>Suspicious Activity Detected</span>
+        <mat-icon class="risk-label risk-label-high">warning</mat-icon>
+        <span class="risk-label risk-label-high">Suspicious Activity Detected</span>
       </div>
       <div *ngIf="indicators.suspiciousTransactions > 0" class="indicator-item">
-        <mat-icon class="warn">error_outline</mat-icon>
-        <span>Suspicious Transactions: {{ indicators.suspiciousTransactions | number }}</span>
+        <mat-icon class="risk-label risk-label-high">error_outline</mat-icon>
+        <span class="risk-label risk-label-high">Suspicious Transactions: {{ indicators.suspiciousTransactions | number }}</span>
       </div>
       <div *ngIf="indicators.unusualVolumeSpikes" class="indicator-item">
-        <mat-icon class="warn">trending_up</mat-icon>
-        <span>Unusual Volume Spikes</span>
+        <mat-icon class="risk-label risk-label-medium">trending_up</mat-icon>
+        <span class="risk-label risk-label-medium">Unusual Volume Spikes</span>
       </div>
     </mat-card-content>
   </mat-card>
