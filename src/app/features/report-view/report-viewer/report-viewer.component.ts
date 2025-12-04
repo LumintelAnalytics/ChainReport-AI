@@ -23,6 +23,7 @@ export class ReportViewerComponent implements OnInit {
   reportData: FinalReportData | null = null;
   isLoading: boolean = true;
   error: string | null = null;
+  isDownloading: boolean = false; // Add this line
 
   constructor(private route: ActivatedRoute, private reportService: ReportService) {}
 
@@ -64,6 +65,7 @@ export class ReportViewerComponent implements OnInit {
 
   downloadReport(): void {
     if (this.reportData && this.reportId) {
+      this.isDownloading = true; // Set to true when download starts
       this.reportService.downloadFinalReport(this.reportId).subscribe({
         next: (response: Blob) => {
           const blob = new Blob([response], { type: 'application/pdf' }); // Assuming PDF, adjust if needed
@@ -75,10 +77,12 @@ export class ReportViewerComponent implements OnInit {
           a.click();
           window.URL.revokeObjectURL(url);
           a.remove();
+          this.isDownloading = false; // Set to false on success
         },
         error: (err) => {
           this.error = err.message || 'Failed to download report.';
           console.error('Download error:', err);
+          this.isDownloading = false; // Set to false on error
         }
       });
     } else {
