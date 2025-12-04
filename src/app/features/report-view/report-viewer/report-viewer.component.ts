@@ -61,4 +61,10 @@ export class ReportViewerComponent implements OnInit {
     this.layoutView = this.layoutView === 'tabs' ? 'sidebar' : 'tabs';
     localStorage.setItem('reportLayoutView', this.layoutView);
   }
+
+  downloadReport(): void {
+    console.log('Download Report button clicked.');
+    // Implement actual download logic here, e.g., calling a service to fetch the report file.
+    // For now, it just logs to the console.
+  }
 }
