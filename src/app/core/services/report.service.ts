@@ -249,7 +249,6 @@ export class ReportService implements OnDestroy {
     this.errorSubject.next(null); // Clear any previous errors
     this.progressMessageSubject.next('');
   }
-
   downloadFinalReport(reportId: string): Observable<Blob> {
     return this.http.get(`/api/v1/report/download/${reportId}`, { responseType: 'blob' }).pipe(
       catchError((error: HttpErrorResponse) => {
@@ -262,9 +261,9 @@ export class ReportService implements OnDestroy {
   }
 
   /**
-   * Fetches the final report data for a given report ID.
+   * Downloads the final report as a Blob for a given report ID.
    * @param reportId The unique identifier of the report.
-   * @returns An Observable that emits the FinalReportData.
+   * @returns An Observable that emits a Blob representing the file download.
    * @throws Emits a ReportError through `reportError$` observable if an HTTP error occurs.
    */
   getFinalReport(reportId: string): Observable<FinalReportData> {
