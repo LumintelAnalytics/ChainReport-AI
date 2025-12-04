@@ -7,7 +7,7 @@
     </button>
   </div>
 
-  <button mat-raised-button color="primary" class="download-report-button" (click)="downloadReport()">
+  <button mat-raised-button color="primary" class="download-report-button" (click)="downloadReport()" [disabled]="isLoading || !!error || !reportData">
     <mat-icon>download</mat-icon>
     Download Report
   </button>

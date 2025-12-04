@@ -63,8 +63,26 @@ export class ReportViewerComponent implements OnInit {
   }
 
   downloadReport(): void {
-    console.log('Download Report button clicked.');
-    // Implement actual download logic here, e.g., calling a service to fetch the report file.
-    // For now, it just logs to the console.
+    if (this.reportData && this.reportId) {
+      this.reportService.downloadFinalReport(this.reportId).subscribe({
+        next: (response: Blob) => {
+          const blob = new Blob([response], { type: 'application/pdf' }); // Assuming PDF, adjust if needed
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `report-${this.reportId}.pdf`; // Dynamic filename
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(url);
+          a.remove();
+        },
+        error: (err) => {
+          this.error = err.message || 'Failed to download report.';
+          console.error('Download error:', err);
+        }
+      });
+    } else {
+      console.warn('Download Report button clicked but reportData or reportId is not available.');
+    }
   }
 }

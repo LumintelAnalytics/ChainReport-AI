@@ -250,6 +250,17 @@ export class ReportService implements OnDestroy {
     this.progressMessageSubject.next('');
   }
 
+  downloadFinalReport(reportId: string): Observable<Blob> {
+    return this.http.get(`/api/v1/report/download/${reportId}`, { responseType: 'blob' }).pipe(
+      catchError((error: HttpErrorResponse) => {
+        const reportError = this.handleError(error);
+        console.error(`HTTP error downloading final report ${reportId}:`, reportError);
+        this.errorSubject.next(reportError);
+        return throwError(() => reportError);
+      })
+    );
+  }
+
   /**
    * Fetches the final report data for a given report ID.
    * @param reportId The unique identifier of the report.
