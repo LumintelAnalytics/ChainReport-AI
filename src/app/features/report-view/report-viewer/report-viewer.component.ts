@@ -1,5 +1,6 @@
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { ReportService } from '../../../core/services/report.service';
+import { ReportCacheService } from '../../../core/services/report-cache.service';
 import { FinalReportData } from '../../../models/report-api.models';
 import { Subscription, switchMap, tap, of } from 'rxjs';
 import { TokenomicsSectionComponent } from '../tokenomics-section/tokenomics-section.component';
@@ -25,7 +26,7 @@ export class ReportViewerComponent implements OnInit {
   error: string | null = null;
   isDownloading: boolean = false; // Add this line
 
-  constructor(private route: ActivatedRoute, private reportService: ReportService) {}
+  constructor(private route: ActivatedRoute, private reportService: ReportService, private reportCacheService: ReportCacheService) {}
 
   ngOnInit(): void {
     this.route.paramMap
@@ -34,6 +35,7 @@ export class ReportViewerComponent implements OnInit {
           this.isLoading = true;
           this.error = null;
           this.reportData = null; // Clear previous report data
+          this.reportCacheService.clearCache(); // Clear cache when reportId changes
         }),
         switchMap(params => {
           this.reportId = params.get('reportId');
@@ -88,5 +90,9 @@ export class ReportViewerComponent implements OnInit {
     } else {
       console.warn('Download Report button clicked but reportData or reportId is not available.');
     }
+  }
+
+  clearReportCache(): void {
+    this.reportCacheService.clearCache();
   }
 }
