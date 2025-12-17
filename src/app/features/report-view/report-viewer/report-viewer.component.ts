@@ -24,7 +24,8 @@ export class ReportViewerComponent implements OnInit {
   reportData: FinalReportData | null = null;
   isLoading: boolean = true;
   error: string | null = null;
-  isDownloading: boolean = false; // Add this line
+  downloadError: string | null = null; // Specific error for download
+  isDownloading: boolean = false;
 
   constructor(private route: ActivatedRoute, private reportService: ReportService, private reportCacheService: ReportCacheService) {}
 
@@ -66,6 +67,7 @@ export class ReportViewerComponent implements OnInit {
   }
 
   downloadReport(): void {
+    this.downloadError = null; // Clear previous download errors
     if (this.reportData && this.reportId) {
       this.isDownloading = true; // Set to true when download starts
       this.reportService.downloadFinalReport(this.reportId).subscribe({
@@ -82,13 +84,14 @@ export class ReportViewerComponent implements OnInit {
           this.isDownloading = false; // Set to false on success
         },
         error: (err) => {
-          this.error = err.message || 'Failed to download report.';
+          this.downloadError = err.message || 'Failed to download report.'; // Use downloadError
           console.error('Download error:', err);
           this.isDownloading = false; // Set to false on error
         }
       });
     } else {
       console.warn('Download Report button clicked but reportData or reportId is not available.');
+      this.downloadError = 'Report data not available for download.';
     }
   }
 
